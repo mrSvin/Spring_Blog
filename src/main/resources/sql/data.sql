@@ -1,0 +1,8 @@
+-- INSERT INTO `skillbox_blog`.`users` (`code`, `email`, `is_moderator`, `name`, `password`, `photo`, `reg_time`) VALUES ('1111', 'aaa@mail.ru', '1', 'oksana', '123', 'https://go.skillbox.ru/media/user/photo/110dcfdb-a407-42e7-b2ae-b5dff52ed400.jpg', '14.09.21');
+-- INSERT INTO `skillbox_blog`.`tags` (`name`) VALUES ('fun');
+-- INSERT INTO `skillbox_blog`.`tag2post` (`post_id`, `tag_id`) VALUES ('1', '1');
+-- INSERT INTO `skillbox_blog`.`posts` (`is_active`, `moderation_status`, `moderator_id`, `text`, `time`, `title`, `view_count`, `user_id`) VALUES ('1', '1', '1', 'Hello World!', '14.09.21', 'Test', '1', '1');
+-- INSERT INTO `skillbox_blog`.`post_votes` (`time`, `value`, `post_id`, `user_id`) VALUES ('14.09.21', '1', '1', '1');
+-- INSERT INTO `skillbox_blog`.`post_comments` (`parent_id`, `text`, `time`, `user_id`, `post_id`) VALUES ('1', 'test comment!', '14.09.21', '1', '1');
+-- INSERT INTO `skillbox_blog`.`global_settings` (`code`, `name`, `value`) VALUES ('1111', 'test', '1');
+-- INSERT INTO `skillbox_blog`.`captcha_codes` (`code`, `secret_code`, `time`) VALUES ('321', '1111', '14.09.21');
