@@ -14,6 +14,4 @@ public class DefaultController {
         return "index";
     }
 
-
-
 }
