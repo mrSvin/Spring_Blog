@@ -30,9 +30,9 @@
         <version>2.1.4.RELEASE</version>
     </parent>
 
-    <properties>
-        <logstash.host>logstashcsm.example.ru</logstash.host>
-    </properties>
+<!--    <properties>-->
+<!--        <logstash.host>logstashcsm.example.ru</logstash.host>-->
+<!--    </properties>-->
 
     <dependencies>
         <dependency>
