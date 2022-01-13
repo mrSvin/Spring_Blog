@@ -5,9 +5,7 @@ import main.service.AuthCheckService;
 import main.service.PostService;
 import main.service.SettingsService;
 import main.service.TagService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -29,7 +27,9 @@ public class ApiGeneralController {
 
     @GetMapping("/settings")
     private SettingsResponse Settings() {
+
         return settingsService.getGlobalSettings();
+//        return settingsService.getGlobal_settings(2);
     }
 
     @GetMapping("/init")
@@ -43,9 +43,18 @@ public class ApiGeneralController {
     }
 
     @GetMapping("/post")
-    private PostsResponse Post() {
-        return postService.getPosts();
+    private PostsResponse Post (
+            @RequestParam(value = "offset") int offset,
+            @RequestParam(value = "limit") int limit,
+            @RequestParam(value = "mode") String mode)
+    {
+        return postService.getPosts(offset, limit, mode);
     }
+
+//    @GetMapping("/post?offset={offset}&limit={limit}&mode={mode}")
+//    private PostsResponse Post(@PathVariable int offset, @PathVariable  int limit, @PathVariable  String mode) {
+//        return postService.getPosts(offset, limit, mode);
+//    }
 
     @GetMapping("/tag")
     private TagResponse Tag() {

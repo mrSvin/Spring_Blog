@@ -1,25 +1,46 @@
 package main.service;
 
-import main.api.response.AuthCheckResponse;
 import main.api.response.PostsResponse;
+import main.model.PostRepository;
+import main.model.Posts;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class PostService {
-    public PostsResponse getPosts() {
+
+    private final PostRepository postRepository;
+
+    public PostService(PostRepository postRepository) {
+        this.postRepository = postRepository;
+    }
+
+    public PostsResponse getPosts(int offset, int limit, String mode) {
 
         PostsResponse postsResponse = new PostsResponse();
 
-        Map<String, Integer> map = new HashMap<String, Integer>() {};
+        int count = (int) postRepository.count();
+        postsResponse.setCounts(count);
 
-        map.put("id", 1);
-        map.put("timestamp", 1592338706); // want to pass Lists, Integers also
+        if (count>0) {
+            postsResponse.setPosts(postRepository.findAll());
+        } else {
+            postsResponse.setPosts(new ArrayList<>());
+        }
 
-        postsResponse.setPosts(map);
+//        Map<String, Integer> map = new HashMap<String, Integer>() {};
+
+//        map.put("id", offset);
+//        map.put("timestamp", limit); // want to pass Lists, Integers also
+//
 
         return postsResponse;
     }
+
+
+
 }

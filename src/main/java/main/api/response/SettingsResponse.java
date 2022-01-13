@@ -1,14 +1,20 @@
 package main.api.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import main.model.Global_settings;
+import main.model.Global_settingsRepository;
 
 public class SettingsResponse {
+
     @JsonProperty("MULTIUSER_MODE")
     private boolean multiserMode;
     @JsonProperty("POST_PREMODERATION")
     private boolean postPremoderation;
     @JsonProperty("STATISTICS_IS_PUBLIC")
     private boolean statisticIsPublic;
+
+    public SettingsResponse() {
+    }
 
     public boolean isMultiserMode() {
         return multiserMode;

@@ -1,29 +1,36 @@
 package main.api.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.ArrayList;
-import java.util.Map;
+import main.model.Posts;
 
 public class PostsResponse {
 
     private int counts;
-    private Map<String, Integer> posts;
+
+    //    private Map<String, String> posts;
+    private Iterable<Posts> posts;
 
     public int getCounts() {
         return counts;
     }
-
     public void setCounts(int counts) {
         this.counts = counts;
     }
 
-    public Map<String, Integer> getPosts() {
+    public Iterable<Posts> getPosts() {
         return posts;
     }
 
-    public void setPosts(Map<String, Integer> posts) {
+    public void setPosts(Iterable<Posts> posts) {
         this.posts = posts;
     }
+
+
+//    public Map<String, String> getPosts() {
+//        return posts;
+//    }
+//    public void setPosts(Map<String, String> posts) {
+//        this.posts = posts;
+//    }
+
 
 }
