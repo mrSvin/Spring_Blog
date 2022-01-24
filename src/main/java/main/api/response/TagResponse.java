@@ -1,15 +1,16 @@
 package main.api.response;
 
+import java.util.List;
 import java.util.Map;
 
 public class TagResponse {
-    private Map<String, String> tags;
+    private List<Map<String, Object>> tags;
 
-    public Map<String, String> getTags() {
+    public List<Map<String, Object>> getTags() {
         return tags;
     }
 
-    public void setTags(Map<String, String> tags) {
+    public void setTags(List<Map<String, Object>> tags) {
         this.tags = tags;
     }
 

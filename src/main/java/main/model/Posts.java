@@ -2,6 +2,7 @@ package main.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Entity
 public class Posts {
@@ -25,7 +26,7 @@ public class Posts {
 
     @Column(columnDefinition = "DATETIME")
     @NotNull
-    private String time;
+    private Date time;
 
     @Column(columnDefinition = "VARCHAR(255)")
     @NotNull
@@ -72,11 +73,11 @@ public class Posts {
         this.moderator_id = moderator_id;
     }
 
-    public String getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 

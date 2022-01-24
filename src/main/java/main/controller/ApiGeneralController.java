@@ -43,22 +43,23 @@ public class ApiGeneralController {
     }
 
     @GetMapping("/post")
-    private PostsResponse Post (
+    private PostsResponse Post(
             @RequestParam(value = "offset") int offset,
             @RequestParam(value = "limit") int limit,
-            @RequestParam(value = "mode") String mode)
-    {
+            @RequestParam(value = "mode") String mode
+    ) {
         return postService.getPosts(offset, limit, mode);
     }
 
-//    @GetMapping("/post?offset={offset}&limit={limit}&mode={mode}")
-//    private PostsResponse Post(@PathVariable int offset, @PathVariable  int limit, @PathVariable  String mode) {
-//        return postService.getPosts(offset, limit, mode);
-//    }
-
     @GetMapping("/tag")
-    private TagResponse Tag() {
-        return tagService.getTags();
+    private TagResponse Tag(
+            @RequestParam(value = "query", required=false) String query) {
+        if (query == null) {
+            return tagService.getTagsAll();
+        } else  {
+            return tagService.getTags(query);
+        }
+
     }
 
 }

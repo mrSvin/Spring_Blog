@@ -1,13 +1,14 @@
 package main.api.response;
 
-import main.model.Posts;
+import java.util.List;
+import java.util.Map;
 
 public class PostsResponse {
 
     private int counts;
 
     //    private Map<String, String> posts;
-    private Iterable<Posts> posts;
+    private List<Map<String, Object>> posts;
 
     public int getCounts() {
         return counts;
@@ -16,11 +17,11 @@ public class PostsResponse {
         this.counts = counts;
     }
 
-    public Iterable<Posts> getPosts() {
+    public List<Map<String, Object>> getPosts() {
         return posts;
     }
 
-    public void setPosts(Iterable<Posts> posts) {
+    public void setPosts(List<Map<String, Object>> posts) {
         this.posts = posts;
     }
 

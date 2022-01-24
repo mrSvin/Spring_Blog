@@ -8,7 +8,6 @@
 -- INSERT INTO `skillbox_blog`.`tags` (`name`) VALUES ('trash');
 -- INSERT INTO `skillbox_blog`.`tags` (`name`) VALUES ('news');
 -- INSERT INTO `skillbox_blog`.`tags` (`name`) VALUES ('work');
--- INSERT INTO `skillbox_blog`.`tags` (`name`) VALUES ('video');
 
 -- INSERT INTO `skillbox_blog`.`tag2post` (`post_id`, `tag_id`) VALUES ('1', '1');
 -- INSERT INTO `skillbox_blog`.`tag2post` (`post_id`, `tag_id`) VALUES ('2', '2');
@@ -16,11 +15,11 @@
 -- INSERT INTO `skillbox_blog`.`tag2post` (`post_id`, `tag_id`) VALUES ('4', '4');
 -- INSERT INTO `skillbox_blog`.`tag2post` (`post_id`, `tag_id`) VALUES ('5', '5');
 
--- INSERT INTO `skillbox_blog`.`posts` (`is_active`, `moderation_status`, `moderator_id`, `text`, `time`, `title`, `view_count`, `user_id`) VALUES ('1', '1', '1', 'Hello World!', '14.09.21', 'Test', '1', '1');
--- INSERT INTO `skillbox_blog`.`posts` (`is_active`, `moderation_status`, `moderator_id`, `text`, `time`, `title`, `view_count`, `user_id`) VALUES ('0', '1', '2', 'Test 2!', '12.01.22', 'Test 2', '2', '2');
--- INSERT INTO `skillbox_blog`.`posts` (`is_active`, `moderation_status`, `moderator_id`, `text`, `time`, `title`, `view_count`, `user_id`) VALUES ('0', '2', '2', 'Test 3!', '12.01.22', 'Test 3', '10', '3');
--- INSERT INTO `skillbox_blog`.`posts` (`is_active`, `moderation_status`, `moderator_id`, `text`, `time`, `title`, `view_count`, `user_id`) VALUES ('0', '3', '2', 'Test 4!', '12.01.22', 'Test 4', '321', '4');
--- INSERT INTO `skillbox_blog`.`posts` (`is_active`, `moderation_status`, `moderator_id`, `text`, `time`, `title`, `view_count`, `user_id`) VALUES ('0', '1', '2', 'Test 5!', '12.01.22', 'Test 5', '9', '5');
+-- INSERT INTO `skillbox_blog`.`posts` (`is_active`, `moderation_status`, `moderator_id`, `text`, `time`, `title`, `view_count`, `user_id`) VALUES ('1', 'NEW', '1', 'Hello World!', '14.09.21', 'Test', '1', '1');
+-- INSERT INTO `skillbox_blog`.`posts` (`is_active`, `moderation_status`, `moderator_id`, `text`, `time`, `title`, `view_count`, `user_id`) VALUES ('0', 'ACCEPTED', '2', 'Test 2!', '12.01.22', 'Test 2', '2', '2');
+-- INSERT INTO `skillbox_blog`.`posts` (`is_active`, `moderation_status`, `moderator_id`, `text`, `time`, `title`, `view_count`, `user_id`) VALUES ('0', 'ACCEPTED', '2', 'Test 3!', '12.01.22', 'Test 3', '10', '3');
+-- INSERT INTO `skillbox_blog`.`posts` (`is_active`, `moderation_status`, `moderator_id`, `text`, `time`, `title`, `view_count`, `user_id`) VALUES ('0', 'DECLINED', '2', 'Test 4!', '12.01.22', 'Test 4', '321', '4');
+-- INSERT INTO `skillbox_blog`.`posts` (`is_active`, `moderation_status`, `moderator_id`, `text`, `time`, `title`, `view_count`, `user_id`) VALUES ('0', 'ACCEPTED', '2', 'Test 5!', '12.01.22', 'Test 5', '9', '5');
 
 -- INSERT INTO `skillbox_blog`.`post_votes` (`time`, `value`, `post_id`, `user_id`) VALUES ('14.09.21', '1', '1', '1');
 -- INSERT INTO `skillbox_blog`.`post_votes` (`time`, `value`, `post_id`, `user_id`) VALUES ('12.01.22', '24', '2', '2');
@@ -29,10 +28,10 @@
 -- INSERT INTO `skillbox_blog`.`post_votes` (`time`, `value`, `post_id`, `user_id`) VALUES ('12.01.22', '7', '5', '4');
 
 -- INSERT INTO `skillbox_blog`.`post_comments` (`parent_id`, `text`, `time`, `user_id`, `post_id`) VALUES ('1', 'test comment!', '14.09.21', '1', '1');
--- INSERT INTO `skillbox_blog`.`post_comments` (`parent_id`, `text`, `time`, `user_id`, `post_id`) VALUES ('2', 'test comment2!', '12.01.22', '3', '3');
+-- INSERT INTO `skillbox_blog`.`post_comments` (`parent_id`, `text`, `time`, `user_id`, `post_id`) VALUES ('2', 'test comment2!', '12.01.22', '3', '2');
 -- INSERT INTO `skillbox_blog`.`post_comments` (`parent_id`, `text`, `time`, `user_id`, `post_id`) VALUES ('2', 'test comment3!', '12.01.22', '3', '3');
--- INSERT INTO `skillbox_blog`.`post_comments` (`parent_id`, `text`, `time`, `user_id`, `post_id`) VALUES ('2', 'test comment4!', '12.01.22', '3', '3');
--- INSERT INTO `skillbox_blog`.`post_comments` (`parent_id`, `text`, `time`, `user_id`, `post_id`) VALUES ('2', 'test comment5!', '12.01.22', '3', '3');
+-- INSERT INTO `skillbox_blog`.`post_comments` (`parent_id`, `text`, `time`, `user_id`, `post_id`) VALUES ('2', 'test comment4!', '12.01.22', '3', '4');
+-- INSERT INTO `skillbox_blog`.`post_comments` (`parent_id`, `text`, `time`, `user_id`, `post_id`) VALUES ('2', 'test comment5!', '12.01.22', '3', '4');
 
 -- INSERT INTO `skillbox_blog`.`global_settings` (`code`, `name`, `value`) VALUES ('1111', 'test', '1');
 -- INSERT INTO `skillbox_blog`.`global_settings` (`code`, `name`, `value`) VALUES ('2222', 'test2', '2');

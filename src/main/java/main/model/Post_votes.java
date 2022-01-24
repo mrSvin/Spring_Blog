@@ -21,7 +21,7 @@ public class Post_votes {
 
     @Column(columnDefinition = "TINYINT")
     @NotNull
-    private String value;
+    private Integer value;
 
     public int getId() {
         return id;
@@ -39,11 +39,11 @@ public class Post_votes {
         this.time = time;
     }
 
-    public String getValue() {
+    public Integer getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(Integer value) {
         this.value = value;
     }
 
