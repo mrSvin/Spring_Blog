@@ -1,10 +1,11 @@
-package main.model;
+package main.repository;
 
+import main.model.PostComment;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface Post_commentsRepository extends CrudRepository<Post_comments, Integer> {
+public interface PostCommentRepository extends CrudRepository<PostComment, Integer> {
 }
 
 

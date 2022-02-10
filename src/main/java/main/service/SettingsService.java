@@ -1,8 +1,8 @@
 package main.service;
 
 import main.api.response.SettingsResponse;
-import main.model.Global_settings;
-import main.model.Global_settingsRepository;
+import main.model.GlobalSetting;
+import main.repository.GlobalSettingsRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,9 +11,9 @@ import java.util.List;
 @Service
 public class SettingsService {
 
-    private final Global_settingsRepository global_settingsRepository;
+    private final GlobalSettingsRepository global_settingsRepository;
 
-    public SettingsService(Global_settingsRepository global_settingsRepository) {
+    public SettingsService(GlobalSettingsRepository global_settingsRepository) {
         this.global_settingsRepository = global_settingsRepository;
     }
 
@@ -31,9 +31,9 @@ public class SettingsService {
 
     private boolean valueById(int id) {
         String value = null;
-        Iterable<Global_settings> global_settingsIterable = global_settingsRepository.findAllById(id);
-        List<Global_settings> global_settings = new ArrayList<>();
-        for (Global_settings global_setting : global_settingsIterable) {
+        Iterable<GlobalSetting> global_settingsIterable = global_settingsRepository.findAllById(id);
+        List<GlobalSetting> global_settings = new ArrayList<>();
+        for (GlobalSetting global_setting : global_settingsIterable) {
             global_settings.add(global_setting);
             value = global_setting.getValue();
         }

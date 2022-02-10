@@ -2,27 +2,27 @@ package main.service;
 
 import main.api.response.PostsResponse;
 import main.model.*;
+import main.repository.PostRepository;
+import main.repository.PostVotesRepository;
+import main.repository.PostCommentRepository;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
-import java.time.LocalDate;
 import java.util.*;
 
 @Service
 public class PostService {
 
-    private int offset = 10;
-    private int limit = 0;
-    private int count = 0;
 
     private final PostRepository postRepository;
-    private final Post_votesRepository post_votesRepository;
-    private final Post_commentsRepository post_commentsRepository;
+    private final PostVotesRepository postVotesRepository;
+    private final PostCommentRepository postCommentRepository;
+    private String activePostTrue = "1";
+    private String activeModerationTrue = "ACCEPTED";
 
-    public PostService(PostRepository postRepository, Post_votesRepository post_votesRepository, Post_commentsRepository post_commentsRepository) {
+    public PostService(PostRepository postRepository, PostVotesRepository postVotesRepository, PostCommentRepository postCommentRepository) {
         this.postRepository = postRepository;
-        this.post_votesRepository = post_votesRepository;
-        this.post_commentsRepository = post_commentsRepository;
+        this.postVotesRepository = postVotesRepository;
+        this.postCommentRepository = postCommentRepository;
     }
 
     public PostsResponse getPosts(int offset, int limit, String mode) {
@@ -42,14 +42,14 @@ public class PostService {
             limit = postsActive.size();
         }
 
-        count = 0;
+        int countPosts = 0;
         //Считаем и выводим количество постов с учетом всех фильтров
         for (int i = offset; i < limit; i++) {
-            if (postsActive.get(i).equals("1") && postsModeration.get(i).equals("ACCEPTED")) {
-                count++;
+            if (postsActive.get(i).equals(activePostTrue) && postsModeration.get(i).equals(activeModerationTrue)) {
+                countPosts++;
             }
         }
-        postsResponse.setCounts(count);
+        postsResponse.setCounts(countPosts);
 
         //Собираем в коллекции необходимые данные по постам
         List<Integer> postsId = new ArrayList<>();
@@ -57,7 +57,7 @@ public class PostService {
         List<String> postsTitle = new ArrayList<>();
         List<String> postsAnnounce = new ArrayList<>();
         List<Integer> postsLikeCount = new ArrayList<>();
-        List<Posts> postsCommentPost = new ArrayList<>();
+        List<Post> postCommentPost = new ArrayList<>();
         List<String> postsViewCount = new ArrayList<>();
         List<Integer> userId = new ArrayList<>();
         List<String> userName = new ArrayList<>();
@@ -66,8 +66,8 @@ public class PostService {
         postRepository.findAll().forEach(postRepository -> postsTime.add(postRepository.getTime()));
         postRepository.findAll().forEach(postRepository -> postsTitle.add(postRepository.getTitle()));
         postRepository.findAll().forEach(postRepository -> postsAnnounce.add(postRepository.getText()));
-        post_votesRepository.findAll().forEach(post_votesRepository -> postsLikeCount.add(post_votesRepository.getValue()));
-        post_commentsRepository.findAll().forEach(post_commentsRepository -> postsCommentPost.add(post_commentsRepository.getPost()));
+        postVotesRepository.findAll().forEach(postVotesRepository -> postsLikeCount.add(postVotesRepository.getValue()));
+        postCommentRepository.findAll().forEach(postCommentRepository -> postCommentPost.add(postCommentRepository.getPost()));
         postRepository.findAll().forEach(postRepository -> postsViewCount.add(postRepository.getView_count()));
         postRepository.findAll().forEach(postRepository -> userId.add(postRepository.getUser().getId()));
         postRepository.findAll().forEach(postRepository -> userName.add(postRepository.getUser().getName()));
@@ -109,7 +109,7 @@ public class PostService {
             //Находим и выводим количество комментариев к посту
             int countComments = 0;
             for (int k = offset; k < limit; k++) {
-                if (i == postsCommentPost.get(k).getId()) {
+                if (i == postCommentPost.get(k).getId()) {
                     countComments++;
                 }
             }

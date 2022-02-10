@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.*;
 public class ApiGeneralController {
 
     private final SettingsService settingsService;
-    private final InitResponse initResponse;
+    //    private final InitResponseDto initResponseDto;
+    InitResponseDto initResponseDto = new InitResponseDto();
     private final AuthCheckService authCheckService;
     private final PostService postService;
     private final TagService tagService;
 
-    public ApiGeneralController(SettingsService settingsService, InitResponse initResponse, AuthCheckService authCheckService, PostService postService, TagService tagService) {
+    public ApiGeneralController(SettingsService settingsService, AuthCheckService authCheckService, PostService postService, TagService tagService) {
         this.settingsService = settingsService;
-        this.initResponse = initResponse;
         this.authCheckService = authCheckService;
         this.postService = postService;
         this.tagService = tagService;
@@ -33,8 +33,8 @@ public class ApiGeneralController {
     }
 
     @GetMapping("/init")
-    private InitResponse Init() {
-        return initResponse;
+    private InitResponseDto Init() {
+        return initResponseDto;
     }
 
     @GetMapping("/auth/check")
@@ -53,10 +53,10 @@ public class ApiGeneralController {
 
     @GetMapping("/tag")
     private TagResponse Tag(
-            @RequestParam(value = "query", required=false) String query) {
+            @RequestParam(value = "query", required = false) String query) {
         if (query == null) {
             return tagService.getTagsAll();
-        } else  {
+        } else {
             return tagService.getTags(query);
         }
 

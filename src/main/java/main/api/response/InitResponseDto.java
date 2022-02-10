@@ -1,23 +1,14 @@
 package main.api.response;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
-@Component
-public class InitResponse {
+public class InitResponseDto {
 
-    @Value("${blog.title}")
-    private String title;
-    @Value("${blog.subtitle}")
-    private String subtitle;
-    @Value("${blog.phone}")
-    private String phone;
-    @Value("${blog.email}")
-    private String email;
-    @Value("${blog.copyright}")
-    private String copyright;
-    @Value("${blog.copyrightFrom}")
-    private String copyrightFrom;
+    private String title = "DevPub";
+    private String subtitle = "Blog for Skillbox";
+    private String phone = "333";
+    private String email = "mail@mail.ru";
+    private String copyright = "Oksana";
+    private String copyrightFrom = "2022 Vasilieva";
 
     public String getTitle() {
         return title;

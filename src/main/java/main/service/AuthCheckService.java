@@ -9,7 +9,7 @@ public class AuthCheckService {
     public AuthCheckResponse getAuthCheck() {
 
         AuthCheckResponse authCheckResponse = new AuthCheckResponse();
-        authCheckResponse.setResult(true);
+        authCheckResponse.setResult(false);
 
         return authCheckResponse;
     }

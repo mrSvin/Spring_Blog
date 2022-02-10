@@ -3,17 +3,17 @@ package main.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@Entity
-public class Post_votes {
+@Entity(name="post_votes")
+public class PostVotes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne (optional=false, cascade=CascadeType.ALL)
-    private Users user;
+    private User user;
 
     @ManyToOne (optional=false, cascade=CascadeType.ALL)
-    private Posts post;
+    private Post post;
 
     @Column(columnDefinition = "DATETIME")
     @NotNull
@@ -47,19 +47,19 @@ public class Post_votes {
         this.value = value;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public Posts getPost() {
+    public Post getPost() {
         return post;
     }
 
-    public void setPost(Posts post) {
+    public void setPost(Post post) {
         this.post = post;
     }
 

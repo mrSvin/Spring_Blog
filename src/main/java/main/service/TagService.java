@@ -2,6 +2,9 @@ package main.service;
 
 import main.api.response.TagResponse;
 import main.model.*;
+import main.repository.PostRepository;
+import main.repository.Tag2postRepository;
+import main.repository.TagRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -50,7 +53,7 @@ public class TagService {
         int queryTagId = -1;  // номер строки запраштваемого тега в таблице
 
         List<String> tags = new ArrayList<>();
-        List<Tags> tagsId = new ArrayList<>();
+        List<Tag> tagId = new ArrayList<>();
         List<Integer> countPostTags = new ArrayList<>();
         List<Double> weightTags = new ArrayList<>();
         List<Double> koefTags = new ArrayList<>();
@@ -68,10 +71,10 @@ public class TagService {
 
 
         //Находим количество публикаций у каждого тэга
-        tag2postRepository.findAll().forEach(tag2postRepository -> tagsId.add(tag2postRepository.getTag()));
+        tag2postRepository.findAll().forEach(tag2postRepository -> tagId.add(tag2postRepository.getTag()));
         for (int i = 0; i < tags.size(); i++) {
-            for (int k = 0; k < tagsId.size(); k++) {
-                if (tagsId.get(k).getName().equals(tags.get(i))) {
+            for (int k = 0; k < tagId.size(); k++) {
+                if (tagId.get(k).getName().equals(tags.get(i))) {
                     countTag++;
                 }
             }

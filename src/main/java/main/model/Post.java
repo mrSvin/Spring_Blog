@@ -4,8 +4,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-@Entity
-public class Posts {
+@Entity(name="posts")
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -22,7 +22,7 @@ public class Posts {
     private String moderator_id;
 
     @ManyToOne (optional=false, cascade=CascadeType.ALL)
-    private Users user;
+    private User user;
 
     @Column(columnDefinition = "DATETIME")
     @NotNull
@@ -105,11 +105,11 @@ public class Posts {
         this.view_count = view_count;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

@@ -1,8 +1,6 @@
 package main.api.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import main.model.Global_settings;
-import main.model.Global_settingsRepository;
 
 public class SettingsResponse {
 

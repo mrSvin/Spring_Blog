@@ -3,8 +3,8 @@ package main.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@Entity
-public class Post_comments {
+@Entity(name="post_comments")
+public class PostComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -13,10 +13,10 @@ public class Post_comments {
     private String parent_id;
 
     @ManyToOne (optional=false, cascade=CascadeType.ALL)
-    private Users user;
+    private User user;
 
     @ManyToOne (optional=false, cascade=CascadeType.ALL)
-    private Posts post;
+    private Post post;
 
     @Column(columnDefinition = "DATETIME")
     @NotNull
@@ -58,19 +58,19 @@ public class Post_comments {
         this.text = text;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public Posts getPost() {
+    public Post getPost() {
         return post;
     }
 
-    public void setPost(Posts post) {
+    public void setPost(Post post) {
         this.post = post;
     }
 

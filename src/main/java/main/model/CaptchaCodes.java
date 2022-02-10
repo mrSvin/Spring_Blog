@@ -3,8 +3,8 @@ package main.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@Entity
-public class Captcha_codes {
+@Entity(name="captcha_codes")
+public class CaptchaCodes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
