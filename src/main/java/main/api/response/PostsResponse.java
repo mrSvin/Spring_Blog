@@ -6,9 +6,7 @@ import java.util.Map;
 public class PostsResponse {
 
     private int counts;
-
-    //    private Map<String, String> posts;
-    private List<Map<String, Object>> posts;
+    private List<PostDetailsDto> posts;
 
     public int getCounts() {
         return counts;
@@ -17,21 +15,11 @@ public class PostsResponse {
         this.counts = counts;
     }
 
-    public List<Map<String, Object>> getPosts() {
+    public List<PostDetailsDto> getPosts() {
         return posts;
     }
-
-    public void setPosts(List<Map<String, Object>> posts) {
+    public void setPosts(List<PostDetailsDto> posts) {
         this.posts = posts;
     }
-
-
-//    public Map<String, String> getPosts() {
-//        return posts;
-//    }
-//    public void setPosts(Map<String, String> posts) {
-//        this.posts = posts;
-//    }
-
 
 }
