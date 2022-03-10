@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 public class ApiGeneralController {
 
     private final SettingsService settingsService;
-    //    private final InitResponseDto initResponseDto;
     InitResponseDto initResponseDto = new InitResponseDto();
     private final AuthCheckService authCheckService;
     private final PostService postService;
@@ -29,7 +28,6 @@ public class ApiGeneralController {
     private SettingsResponse Settings() {
 
         return settingsService.getGlobalSettings();
-//        return settingsService.getGlobal_settings(2);
     }
 
     @GetMapping("/init")

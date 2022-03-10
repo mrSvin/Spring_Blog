@@ -11,10 +11,10 @@ import java.util.List;
 @Service
 public class SettingsService {
 
-    private final GlobalSettingsRepository global_settingsRepository;
+    private final GlobalSettingsRepository globalSettingsRepository;
 
-    public SettingsService(GlobalSettingsRepository global_settingsRepository) {
-        this.global_settingsRepository = global_settingsRepository;
+    public SettingsService(GlobalSettingsRepository globalSettingsRepository) {
+        this.globalSettingsRepository = globalSettingsRepository;
     }
 
     public SettingsResponse getGlobalSettings() {
@@ -31,18 +31,14 @@ public class SettingsService {
 
     private boolean valueById(int id) {
         String value = null;
-        Iterable<GlobalSetting> global_settingsIterable = global_settingsRepository.findAllById(id);
-        List<GlobalSetting> global_settings = new ArrayList<>();
-        for (GlobalSetting global_setting : global_settingsIterable) {
-            global_settings.add(global_setting);
-            value = global_setting.getValue();
+        Iterable<GlobalSetting> globalSettingsIterable = globalSettingsRepository.findAllById(id);
+        List<GlobalSetting> globalSettings = new ArrayList<>();
+        for (GlobalSetting globalSetting : globalSettingsIterable) {
+            globalSettings.add(globalSetting);
+            value = globalSetting.getValue();
         }
 
-        if (value.equals("YES")) {
-            return true;
-        } else {
-            return false;
-        }
+        return "YES".equals(value);
     }
 
 

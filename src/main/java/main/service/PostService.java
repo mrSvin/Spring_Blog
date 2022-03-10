@@ -11,20 +11,15 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.lang.Math.abs;
-
 @Service
 public class PostService {
-
 
     private final PostRepository postRepository;
     private final PostVotesRepository postVotesRepository;
     private final PostCommentRepository postCommentRepository;
-    private String activePostTrue = "1";
-    private String activeModerationTrue = "ACCEPTED";
-
 
     public PostService(PostRepository postRepository, PostVotesRepository postVotesRepository, PostCommentRepository postCommentRepository) {
+
         this.postRepository = postRepository;
         this.postVotesRepository = postVotesRepository;
         this.postCommentRepository = postCommentRepository;
@@ -33,85 +28,46 @@ public class PostService {
     public PostsResponse getPosts(int offset, int limit, String mode) {
         PostsResponse postsResponse = new PostsResponse();
 
-        //Выдаем ответ с количеством постов
-        int countPost = countPost(offset, limit);
-        postsResponse.setCounts(countPost);
 
         //Собираем сущности DTO
-        List<PostDetailsDto> dto = getPostDetailsDto();
-        //Сортируем сущности в зависимости от выбранного типа
-        List<PostDetailsDto> sortedDto = sortPosts(dto, mode);
-
-        postsResponse.setPosts(sortedDto);
+        List<PostDetailsDto> dto = getPostDetailsDto(offset, limit, mode);
+        //Выдаем ответ с количеством постов
+        int countPost = dto.size();
+        postsResponse.setCounts(countPost);
+        postsResponse.setPosts(dto);
 
         return postsResponse;
     }
 
-    private int countPost(int offset, int limit) {
-
-        List<String> postsActive = new ArrayList<>();
-        List<String> postsModeration = new ArrayList<>();
-        postRepository.findAll().forEach(postRepository -> postsActive.add(postRepository.getIs_active()));
-        postRepository.findAll().forEach(tagRepository -> postsModeration.add(tagRepository.getModeration_status()));
-
-        if (offset > postsActive.size()) {
-            offset = postsActive.size();
-        }
-        if (limit > postsActive.size()) {
-            limit = postsActive.size();
-        }
-
-        int countPosts = 0;
-        //Считаем и выводим количество постов с учетом всех фильтров
-        for (int i = offset; i < limit; i++) {
-            if (postsActive.get(i).equals(activePostTrue) && postsModeration.get(i).equals(activeModerationTrue)) {
-                countPosts++;
-            }
-        }
-        return countPosts;
-    }
-
-    public List<PostDetailsDto> sortPosts(List<PostDetailsDto> result, String mode) {
-        List<PostDetailsDto> sorterResult;
-        //best
-        if (mode.equals("best")) {
-            sorterResult = result
+    public List<PostDetailsDto> getPostDetailsDto(int offset, int limit, String mode) {
+        List<PostDetailsDto> result;
+        if ("early".equals(mode)) {
+            result = (postRepository.findByEarly(limit, offset))
                     .stream()
-                    .sorted(Comparator.comparingInt(PostDetailsDto::getLikeCount))
+                    .map(this::postDetailsDTO)
                     .collect(Collectors.toList());
-
-            Collections.reverse(sorterResult);
-        } else if (mode.equals("popular")) {
-            sorterResult = result
+        } else if ("recent".equals(mode)) {
+            result = (postRepository.findByRecent(limit, offset))
                     .stream()
-                    .sorted(Comparator.comparingInt(PostDetailsDto::getCommentCount))
+                    .map(this::postDetailsDTO)
                     .collect(Collectors.toList());
-
-            Collections.reverse(sorterResult);
-        } else if (mode.equals("recent")) {
-            sorterResult = result
+        } else if ("best".equals(mode)) {
+            result = (postRepository.findByBest(limit, offset))
                     .stream()
-                    .sorted(Comparator.comparingLong(PostDetailsDto::getTimestamp))
+                    .map(this::postDetailsDTO)
                     .collect(Collectors.toList());
-        } else if (mode.equals("early")) {
-            sorterResult = result
+        } else if ("popular".equals(mode)) {
+            result = (postRepository.findByPopular(limit, offset))
                     .stream()
-                    .sorted(Comparator.comparingLong(PostDetailsDto::getTimestamp))
+                    .map(this::postDetailsDTO)
                     .collect(Collectors.toList());
-
-            Collections.reverse(sorterResult);
-        } else {
-            sorterResult = result;
         }
-
-        return sorterResult;
-    }
-
-    public List<PostDetailsDto> getPostDetailsDto() {
-        List<PostDetailsDto> result = ((List<Post>) postRepository.findAll())
-                .stream()
-                .map(this::postDetailsDTO)
-                .collect(Collectors.toList());
+        else {
+            result = (postRepository.findByEarly(limit, offset))
+                    .stream()
+                    .map(this::postDetailsDTO)
+                    .collect(Collectors.toList());
+        }
 
         return result;
     }
