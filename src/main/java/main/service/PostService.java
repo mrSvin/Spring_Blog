@@ -28,7 +28,6 @@ public class PostService {
     public PostsResponse getPosts(int offset, int limit, String mode) {
         PostsResponse postsResponse = new PostsResponse();
 
-
         //Собираем сущности DTO
         List<PostDetailsDto> dto = getPostDetailsDto(offset, limit, mode);
         //Выдаем ответ с количеством постов
@@ -71,7 +70,6 @@ public class PostService {
 
         return result;
     }
-
     private PostDetailsDto postDetailsDTO(Post post) {
         PostDetailsDto postDetailsDto = new PostDetailsDto();
         postDetailsDto.setId(post.getId());
@@ -112,6 +110,54 @@ public class PostService {
         postDetailsDto.setUser(user);
 
         return postDetailsDto;
+    }
+
+    public PostsResponse getPostsSearch(int offset, int limit, String query) {
+        PostsResponse postsResponse = new PostsResponse();
+
+        //Собираем сущности DTO
+        List<PostDetailsDto> dto = getPostSearchDetailsDto(offset, limit, query);
+        //Выдаем ответ с количеством постов
+        int countPost = dto.size();
+        postsResponse.setCounts(countPost);
+        postsResponse.setPosts(dto);
+
+        return postsResponse;
+    }
+    public List<PostDetailsDto> getPostSearchDetailsDto(int offset, int limit, String query) {
+
+        query = "%" + query + "%";
+
+        List<PostDetailsDto> result;
+        result = (postRepository.findQuery(query, limit, offset))
+                .stream()
+                .map(this::postDetailsDTO)
+                .collect(Collectors.toList());
+
+        return result;
+    }
+
+    public PostsResponse getPostsByDate(int offset, int limit, String date) {
+        PostsResponse postsResponse = new PostsResponse();
+
+        //Собираем сущности DTO
+        List<PostDetailsDto> dto = getPostByDateDto(offset, limit, date);
+        //Выдаем ответ с количеством постов
+        int countPost = dto.size();
+        postsResponse.setCounts(countPost);
+        postsResponse.setPosts(dto);
+
+        return postsResponse;
+    }
+    public List<PostDetailsDto> getPostByDateDto(int offset, int limit, String date) {
+
+        List<PostDetailsDto> result;
+        result = (postRepository.findByDate(date, limit, offset))
+                .stream()
+                .map(this::postDetailsDTO)
+                .collect(Collectors.toList());
+
+        return result;
     }
 
 }

@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface PostRepository extends CrudRepository<Post, Integer> {
@@ -30,8 +31,30 @@ public interface PostRepository extends CrudRepository<Post, Integer> {
             " join skillbox_blog.posts on skillbox_blog.posts.id = skillbox_blog.post_comments.post_id " +
             "group by post_id " +
             "order by count_comments desc " +
-            "limit 10 offset 0", nativeQuery = true)
+            "limit ?1 offset ?2", nativeQuery = true)
     public List<Post> findByPopular(int limit, int offset);
+
+    @Query(value="SELECT * FROM skillbox_blog.posts " +
+            "where text LIKE ?1 " +
+            "limit ?2 offset ?3", nativeQuery = true)
+    public List<Post> findQuery(String query, int limit, int offset);
+
+    @Query(value="SELECT date(time) FROM skillbox_blog.posts " +
+            "where year(time)=?1 AND is_active = 1 AND moderation_status = 'ACCEPTED' " +
+            "group by date(time) " +
+            "order by time", nativeQuery = true)
+    public List<String> findYear(int year);
+
+    @Query(value="SELECT count(date(time)) FROM skillbox_blog.posts " +
+            "where year(time)=?1 AND is_active = 1 AND moderation_status = 'ACCEPTED' " +
+            "group by date(time) " +
+            "order by time", nativeQuery = true)
+    public List<Integer> findYearCount(int year);
+
+    @Query(value="SELECT * FROM skillbox_blog.posts " +
+            "where date(time)=?1 AND is_active = 1 AND moderation_status = 'ACCEPTED' " +
+            "limit ?2 offset ?3", nativeQuery = true)
+    public List<Post> findByDate(String date, int limit, int offset);
 
 }
 

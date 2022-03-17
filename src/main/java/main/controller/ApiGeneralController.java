@@ -14,13 +14,12 @@ public class ApiGeneralController {
     private final SettingsService settingsService;
     InitResponseDto initResponseDto = new InitResponseDto();
     private final AuthCheckService authCheckService;
-    private final PostService postService;
+
     private final TagService tagService;
 
-    public ApiGeneralController(SettingsService settingsService, AuthCheckService authCheckService, PostService postService, TagService tagService) {
+    public ApiGeneralController(SettingsService settingsService, AuthCheckService authCheckService, TagService tagService) {
         this.settingsService = settingsService;
         this.authCheckService = authCheckService;
-        this.postService = postService;
         this.tagService = tagService;
     }
 
@@ -38,15 +37,6 @@ public class ApiGeneralController {
     @GetMapping("/auth/check")
     private AuthCheckResponse Check() {
         return authCheckService.getAuthCheck();
-    }
-
-    @GetMapping("/post")
-    private PostsResponse Post(
-            @RequestParam(value = "offset") int offset,
-            @RequestParam(value = "limit") int limit,
-            @RequestParam(value = "mode") String mode
-    ) {
-        return postService.getPosts(offset, limit, mode);
     }
 
     @GetMapping("/tag")

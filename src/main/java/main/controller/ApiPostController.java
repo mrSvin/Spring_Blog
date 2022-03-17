@@ -1,7 +1,60 @@
 package main.controller;
 
-import org.springframework.stereotype.Controller;
+import main.api.response.PostCalendarDto;
+import main.api.response.PostsResponse;
+import main.service.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import java.util.Calendar;
+
+@RestController
+@RequestMapping("/api")
 public class ApiPostController {
+
+    private final PostService postService;
+    private final CalendarService calendarService;
+
+    public ApiPostController(PostService postService, CalendarService calendarService) {
+
+        this.postService = postService;
+        this.calendarService = calendarService;
+    }
+
+    @GetMapping("/post")
+    private PostsResponse Post(
+            @RequestParam(value = "offset") int offset,
+            @RequestParam(value = "limit") int limit,
+            @RequestParam(value = "mode") String mode
+    ) {
+        return postService.getPosts(offset, limit, mode);
+    }
+
+    @GetMapping("/post/search")
+    private PostsResponse PostSearch(
+            @RequestParam(value = "offset") int offset,
+            @RequestParam(value = "limit") int limit,
+            @RequestParam(value = "query") String query
+    ) {
+        return postService.getPostsSearch(offset, limit, query);
+    }
+
+    @GetMapping("/calendar")
+    private PostCalendarDto Calendar(
+            @RequestParam(value = "year", defaultValue = "0") Integer years) {
+        return calendarService.getPosts(years);
+    }
+
+    @GetMapping("/post/byDate")
+    private PostsResponse PostbyDate(
+            @RequestParam(value = "offset") int offset,
+            @RequestParam(value = "limit") int limit,
+            @RequestParam(value = "date") String date
+    ) {
+        return postService.getPostsByDate(offset, limit, date);
+    }
+
+
 }
