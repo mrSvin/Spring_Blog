@@ -160,4 +160,73 @@ public class PostService {
         return result;
     }
 
+    public PostsResponse getPostsByTag(int offset, int limit, String tag) {
+        PostsResponse postsResponse = new PostsResponse();
+
+        //Собираем сущности DTO
+        List<PostDetailsDto> dto = getPostByTagDto(offset, limit, tag);
+        //Выдаем ответ с количеством постов
+        int countPost = dto.size();
+        postsResponse.setCounts(countPost);
+        postsResponse.setPosts(dto);
+
+        return postsResponse;
+    }
+    public List<PostDetailsDto> getPostByTagDto(int offset, int limit, String tag) {
+
+        List<PostDetailsDto> result;
+        result = (postRepository.findByTag(tag, limit, offset))
+                .stream()
+                .map(this::postDetailsDTO)
+                .collect(Collectors.toList());
+
+        return result;
+    }
+
+    public PostsResponse getPostsById(int id) {
+        PostsResponse postsResponse = new PostsResponse();
+
+        //Собираем сущности DTO
+        List<PostDetailsDto> dto = getPostById(id);
+        //Выдаем ответ с количеством постов
+        int countPost = dto.size();
+        postsResponse.setCounts(countPost);
+        postsResponse.setPosts(dto);
+
+        return postsResponse;
+    }
+    public List<PostDetailsDto> getPostById(int id) {
+
+        List<PostDetailsDto> result;
+        result = (postRepository.findById(id))
+                .stream()
+                .map(this::postDetailsDTO)
+                .collect(Collectors.toList());
+
+        return result;
+    }
+
+    public PostsResponse getPostsByModeration(int offset, int limit, String status) {
+        PostsResponse postsResponse = new PostsResponse();
+
+        //Собираем сущности DTO
+        List<PostDetailsDto> dto = getPostByModeration(offset, limit, status);
+        //Выдаем ответ с количеством постов
+        int countPost = dto.size();
+        postsResponse.setCounts(countPost);
+        postsResponse.setPosts(dto);
+
+        return postsResponse;
+    }
+    public List<PostDetailsDto> getPostByModeration(int offset, int limit, String status) {
+
+        List<PostDetailsDto> result;
+        result = (postRepository.findByStatus(status, limit, offset))
+                .stream()
+                .map(this::postDetailsDTO)
+                .collect(Collectors.toList());
+
+        return result;
+    }
+
 }

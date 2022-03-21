@@ -3,10 +3,7 @@ package main.controller;
 import main.api.response.PostCalendarDto;
 import main.api.response.PostsResponse;
 import main.service.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
 
@@ -56,5 +53,28 @@ public class ApiPostController {
         return postService.getPostsByDate(offset, limit, date);
     }
 
+    @GetMapping("/post/byTag")
+    private PostsResponse PostbyTag(
+            @RequestParam(value = "offset") int offset,
+            @RequestParam(value = "limit") int limit,
+            @RequestParam(value = "tag") String tag
+    ) {
+        return postService.getPostsByTag(offset, limit, tag);
+    }
+
+    @GetMapping("/post/{ID}")
+    private PostsResponse PostbyId(@PathVariable int ID
+    ) {
+        return postService.getPostsById(ID);
+    }
+
+    @GetMapping("/post/moderation")
+    private PostsResponse PostbyModeration(
+            @RequestParam(value = "offset") int offset,
+            @RequestParam(value = "limit") int limit,
+            @RequestParam(value = "status") String status
+    ) {
+        return postService.getPostsByModeration(offset, limit, status);
+    }
 
 }

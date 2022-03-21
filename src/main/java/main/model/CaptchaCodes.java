@@ -2,6 +2,8 @@ package main.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
+
 
 @Entity(name="captcha_codes")
 public class CaptchaCodes {
@@ -11,7 +13,7 @@ public class CaptchaCodes {
 
     @Column(columnDefinition = "DATETIME")
     @NotNull
-    private String time;
+    private Date time;
 
     @Column(columnDefinition = "TINYTEXT")
     @NotNull
@@ -29,11 +31,11 @@ public class CaptchaCodes {
         this.id = id;
     }
 
-    public String getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 

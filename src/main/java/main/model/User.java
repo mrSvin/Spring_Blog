@@ -1,7 +1,10 @@
 package main.model;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Entity(name="users")
 public class User
@@ -11,10 +14,10 @@ public class User
     private int id;
     @Column(columnDefinition = "TINYINT")
     @NotNull
-    private String is_moderator;
+    private int is_moderator;
     @Column(columnDefinition = "DATETIME")
     @NotNull
-    private String reg_time;
+    private Date reg_time;
     @Column(columnDefinition = "VARCHAR(255)")
     @NotNull
     private String name;
@@ -37,19 +40,19 @@ public class User
         this.id = id;
     }
 
-    public String getIs_moderator() {
+    public int getIs_moderator() {
         return is_moderator;
     }
 
-    public void setIs_moderator(String is_moderator) {
+    public void setIs_moderator(int is_moderator) {
         this.is_moderator = is_moderator;
     }
 
-    public String getReg_time() {
+    public Date getReg_time() {
         return reg_time;
     }
 
-    public void setReg_time(String reg_time) {
+    public void setReg_time(Date reg_time) {
         this.reg_time = reg_time;
     }
 

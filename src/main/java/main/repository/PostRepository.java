@@ -56,5 +56,18 @@ public interface PostRepository extends CrudRepository<Post, Integer> {
             "limit ?2 offset ?3", nativeQuery = true)
     public List<Post> findByDate(String date, int limit, int offset);
 
+    @Query(value="SELECT * FROM skillbox_blog.posts " +
+            "where id = (SELECT post_id FROM skillbox_blog.tag2post" +
+            " where id = (select id FROM skillbox_blog.tags where name = ?1)) " +
+            "limit ?2 offset ?3", nativeQuery = true)
+    public List<Post> findByTag(String tag, int limit, int offset);
+
+    public List<Post> findById(int id);
+
+    @Query(value="SELECT * FROM skillbox_blog.posts " +
+            "where is_active = 1 AND moderation_status = ?1 " +
+            "limit ?2 offset ?3", nativeQuery = true)
+    public List<Post> findByStatus(String status, int limit, int offset);
+
 }
 
