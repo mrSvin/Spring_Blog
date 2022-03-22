@@ -28,8 +28,8 @@ public class ApiAuthController {
 
     @PostMapping("/auth/register")
     private RegisterResponse Register(@RequestBody RegisterRequest registerRequest) {
-        return registerService.register(registerRequest.getE_mail(), registerRequest.getPassword(),
-                registerRequest.getName(), registerRequest.getCaptcha(), registerRequest.getCaptcha_secret());
+        return registerService.register(registerRequest.getEmail(), registerRequest.getPassword(),
+                registerRequest.getName(), registerRequest.getCaptcha(), registerRequest.getCaptchaSecret());
     }
 
 }
