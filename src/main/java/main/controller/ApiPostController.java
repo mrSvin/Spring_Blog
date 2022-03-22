@@ -3,6 +3,7 @@ package main.controller;
 import main.api.response.PostCalendarDto;
 import main.api.response.PostsResponse;
 import main.service.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
@@ -21,6 +22,7 @@ public class ApiPostController {
     }
 
     @GetMapping("/post")
+//    @PreAuthorize("hasAnyAuthority('user:write')")
     private PostsResponse Post(
             @RequestParam(value = "offset") int offset,
             @RequestParam(value = "limit") int limit,
@@ -30,6 +32,7 @@ public class ApiPostController {
     }
 
     @GetMapping("/post/search")
+//    @PreAuthorize("hasAnyAuthority('user:moderate')")
     private PostsResponse PostSearch(
             @RequestParam(value = "offset") int offset,
             @RequestParam(value = "limit") int limit,
