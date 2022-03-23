@@ -96,8 +96,5 @@ public class User
         this.photo = photo;
     }
 
-    public Role getRole() {
-        return is_moderator == 1 ? Role.Moderator : Role.User;
-    }
 
 }

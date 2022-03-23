@@ -229,4 +229,52 @@ public class PostService {
         return result;
     }
 
+    public PostsResponse getPostsMy(int offset, int limit, String status, String authCoocie) {
+        PostsResponse postsResponse = new PostsResponse();
+
+        //Собираем сущности DTO
+        List<PostDetailsDto> dto = getPostMy(offset, limit, status, authCoocie);
+        //Выдаем ответ с количеством постов
+        int countPost = dto.size();
+        postsResponse.setCounts(countPost);
+        postsResponse.setPosts(dto);
+
+        return postsResponse;
+    }
+    public List<PostDetailsDto> getPostMy(int offset, int limit, String status, String authCoocie) {
+
+        List<PostDetailsDto> result;
+        int id = LoginService.sessions.get(authCoocie);
+        List<Post> postRequest;
+
+        int isActive;
+        if (status.equals("inactive")) {
+            postRequest = postRepository.findMyPostByInactive( id, limit, offset);
+        } else if (status.equals("pending")) {
+            isActive=1;
+            status = "NEW";
+            postRequest = postRepository.findMyPost(status, id, isActive, limit, offset);
+        } else if (status.equals("declined")) {
+            isActive=1;
+            status = "DECLINED";
+            postRequest = postRepository.findMyPost(status, id, isActive, limit, offset);
+        } else if (status.equals("published")) {
+            isActive=1;
+            status = "ACCEPTED";
+            postRequest = postRepository.findMyPost(status, id, isActive, limit, offset);
+        } else {
+            isActive =0;
+            status = "";
+            postRequest = postRepository.findMyPost(status, id, isActive, limit, offset);
+        }
+
+        result = (postRequest)
+                .stream()
+                .map(this::postDetailsDTO)
+                .collect(Collectors.toList());
+
+        return result;
+    }
+
+
 }

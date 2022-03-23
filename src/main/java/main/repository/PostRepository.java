@@ -69,5 +69,18 @@ public interface PostRepository extends CrudRepository<Post, Integer> {
             "limit ?2 offset ?3", nativeQuery = true)
     public List<Post> findByStatus(String status, int limit, int offset);
 
+    @Query(value="SELECT COUNT(*) FROM skillbox_blog.posts where moderation_status = 'NEW'", nativeQuery = true)
+    public Integer findByModerationStatus();
+
+    @Query(value="SELECT * FROM skillbox_blog.posts " +
+            "where moderation_status = ?1 AND id=?2 AND is_active = ?3 " +
+            "limit ?4 offset ?5 ", nativeQuery = true)
+    public List<Post> findMyPost(String status, int id, int isActive, int limit, int offset);
+
+    @Query(value="SELECT * FROM skillbox_blog.posts " +
+            "where is_active = 0  AND id=?1 " +
+            "limit ?2 offset ?3 ", nativeQuery = true)
+    public List<Post> findMyPostByInactive(int id, int limit, int offset);
+
 }
 

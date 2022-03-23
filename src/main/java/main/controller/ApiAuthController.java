@@ -1,15 +1,22 @@
 package main.controller;
 
+import com.github.cage.Cage;
+import com.github.cage.GCage;
 import main.api.request.LoginRequest;
 import main.api.request.RegisterRequest;
 import main.api.response.CaptchaResponse;
 import main.api.response.LoginResponse;
+import main.api.response.LogoutResponse;
 import main.api.response.RegisterResponse;
 import main.service.CaptchaService;
+import main.service.LoginService;
 import main.service.RegisterService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RestController
@@ -18,10 +25,12 @@ public class ApiAuthController {
 
     private final CaptchaService captchaService;
     private final RegisterService registerService;
+    private final LoginService loginService;
 
-    public ApiAuthController(CaptchaService captchaService, RegisterService registerService) {
+    public ApiAuthController(CaptchaService captchaService, RegisterService registerService, LoginService loginService) {
         this.captchaService = captchaService;
         this.registerService = registerService;
+        this.loginService = loginService;
     }
 
     @GetMapping("/auth/captcha")
@@ -35,9 +44,27 @@ public class ApiAuthController {
                 registerRequest.getName(), registerRequest.getCaptcha(), registerRequest.getCaptchaSecret());
     }
 
+
     @PostMapping("/auth/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.ok(new LoginResponse());
+    public LoginResponse login(HttpServletResponse response,@RequestBody LoginRequest loginRequest) {
+            Cage cage = new GCage();
+            String authSession = cage.getTokenGenerator().next();
+            Cookie cookie = new Cookie("auth", authSession);//создаем объект Cookie,
+            cookie.setMaxAge(86400);//здесь устанавливается время жизни куки
+            cookie.setPath("/");
+            response.addCookie(cookie);//добавляем Cookie в запрос
+            response.setContentType("text/plain");//устанавливаем контекст
+            return loginService.login(loginRequest.getEmail(), loginRequest.getPassword(), authSession);
+    }
+
+
+    @GetMapping("/auth/logout")
+    private LogoutResponse Logout(HttpServletResponse response, @CookieValue(value = "auth", defaultValue = "") String authCoocie) {
+        Cookie cookie = new Cookie("auth",  "");
+        cookie.setPath("/");
+        System.out.println(authCoocie);
+        response.addCookie(cookie);
+        return loginService.logout(authCoocie);
     }
 
 }

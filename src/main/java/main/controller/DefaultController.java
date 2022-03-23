@@ -13,5 +13,5 @@ public class DefaultController {
 //        System.out.println(initResponse.getTitle());
         return "index";
     }
-
+    
 }
