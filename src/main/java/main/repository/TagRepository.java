@@ -11,6 +11,9 @@ public interface TagRepository extends CrudRepository<Tag, Integer> {
     List<Tag> findAllByOrderByIdDesc();
 
     @Query(value="SELECT id FROM skillbox_blog.tags where name = ?1", nativeQuery = true)
-    public String findIdByName(String nameTag);
+    public Integer findIdByName(String nameTag);
+
+    @Query(value="SELECT id FROM skillbox_blog.tags where name = ?1", nativeQuery = true)
+    public List<Integer> findTag(String nameTag);
 
 }

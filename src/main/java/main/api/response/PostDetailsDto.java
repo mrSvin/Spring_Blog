@@ -12,7 +12,7 @@ public class PostDetailsDto {
     private Integer likeCount;
     private Integer dislikeCount;
     private Integer commentCount;
-    private String viewCount;
+    private Integer viewCount;
 
 
     public int getId() {
@@ -55,11 +55,11 @@ public class PostDetailsDto {
         this.announce = announce;
     }
 
-    public String getViewCount() {
+    public Integer getViewCount() {
         return viewCount;
     }
 
-    public void setViewCount(String viewCount) {
+    public void setViewCount(Integer viewCount) {
         this.viewCount = viewCount;
     }
 

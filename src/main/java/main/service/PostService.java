@@ -1,13 +1,13 @@
 package main.service;
 
+import main.api.response.PostAddResponse;
 import main.api.response.PostDetailsDto;
 import main.api.response.PostsResponse;
 import main.model.*;
-import main.repository.PostRepository;
-import main.repository.PostVotesRepository;
-import main.repository.PostCommentRepository;
+import main.repository.*;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,12 +17,18 @@ public class PostService {
     private final PostRepository postRepository;
     private final PostVotesRepository postVotesRepository;
     private final PostCommentRepository postCommentRepository;
+    private final TagRepository tagRepository;
+    private final Tag2postRepository tag2postRepository;
+    private final UsersRepository usersRepository;
 
-    public PostService(PostRepository postRepository, PostVotesRepository postVotesRepository, PostCommentRepository postCommentRepository) {
+    public PostService(PostRepository postRepository, PostVotesRepository postVotesRepository, PostCommentRepository postCommentRepository, TagRepository tagRepository, Tag2postRepository tag2postRepository, UsersRepository usersRepository) {
 
         this.postRepository = postRepository;
         this.postVotesRepository = postVotesRepository;
         this.postCommentRepository = postCommentRepository;
+        this.tagRepository = tagRepository;
+        this.tag2postRepository = tag2postRepository;
+        this.usersRepository = usersRepository;
     }
 
     public PostsResponse getPosts(int offset, int limit, String mode) {
@@ -60,8 +66,7 @@ public class PostService {
                     .stream()
                     .map(this::postDetailsDTO)
                     .collect(Collectors.toList());
-        }
-        else {
+        } else {
             result = (postRepository.findByEarly(limit, offset))
                     .stream()
                     .map(this::postDetailsDTO)
@@ -70,6 +75,7 @@ public class PostService {
 
         return result;
     }
+
     private PostDetailsDto postDetailsDTO(Post post) {
         PostDetailsDto postDetailsDto = new PostDetailsDto();
         postDetailsDto.setId(post.getId());
@@ -83,9 +89,7 @@ public class PostService {
         postDetailsDto.setAnnounce(annotation);
         postDetailsDto.setViewCount(post.getView_count());
 
-        List<Integer> postsLikeCount = new ArrayList<>();
-        postVotesRepository.findAll().forEach(postVotesRepository -> postsLikeCount.add(postVotesRepository.getValue()));
-        int likeCount = postsLikeCount.get(post.getId() - 1);
+        int likeCount = postVotesRepository.findMyPostVotesValue(post.getId());
         if (likeCount > 0) {
             postDetailsDto.setLikeCount(likeCount);
             postDetailsDto.setDislikeCount(0);
@@ -124,6 +128,7 @@ public class PostService {
 
         return postsResponse;
     }
+
     public List<PostDetailsDto> getPostSearchDetailsDto(int offset, int limit, String query) {
 
         query = "%" + query + "%";
@@ -149,6 +154,7 @@ public class PostService {
 
         return postsResponse;
     }
+
     public List<PostDetailsDto> getPostByDateDto(int offset, int limit, String date) {
 
         List<PostDetailsDto> result;
@@ -172,6 +178,7 @@ public class PostService {
 
         return postsResponse;
     }
+
     public List<PostDetailsDto> getPostByTagDto(int offset, int limit, String tag) {
 
         List<PostDetailsDto> result;
@@ -195,6 +202,7 @@ public class PostService {
 
         return postsResponse;
     }
+
     public List<PostDetailsDto> getPostById(int id) {
 
         List<PostDetailsDto> result;
@@ -218,6 +226,7 @@ public class PostService {
 
         return postsResponse;
     }
+
     public List<PostDetailsDto> getPostByModeration(int offset, int limit, String status) {
 
         List<PostDetailsDto> result;
@@ -241,6 +250,7 @@ public class PostService {
 
         return postsResponse;
     }
+
     public List<PostDetailsDto> getPostMy(int offset, int limit, String status, String authCoocie) {
 
         List<PostDetailsDto> result;
@@ -249,21 +259,21 @@ public class PostService {
 
         int isActive;
         if (status.equals("inactive")) {
-            postRequest = postRepository.findMyPostByInactive( id, limit, offset);
+            postRequest = postRepository.findMyPostByInactive(id, limit, offset);
         } else if (status.equals("pending")) {
-            isActive=1;
+            isActive = 1;
             status = "NEW";
             postRequest = postRepository.findMyPost(status, id, isActive, limit, offset);
         } else if (status.equals("declined")) {
-            isActive=1;
+            isActive = 1;
             status = "DECLINED";
             postRequest = postRepository.findMyPost(status, id, isActive, limit, offset);
         } else if (status.equals("published")) {
-            isActive=1;
+            isActive = 1;
             status = "ACCEPTED";
             postRequest = postRepository.findMyPost(status, id, isActive, limit, offset);
         } else {
-            isActive =0;
+            isActive = 0;
             status = "";
             postRequest = postRepository.findMyPost(status, id, isActive, limit, offset);
         }
@@ -276,5 +286,137 @@ public class PostService {
         return result;
     }
 
+    public PostAddResponse addPost(Timestamp timestamp, int isActive, String title, List<String> tags, String text, String authCoocie) {
+        PostAddResponse postAddResponse = new PostAddResponse();
+
+        Map<String, String> error = new HashMap<>();
+
+        if (title.length() < 3) {
+            postAddResponse.setResult(false);
+            error.put("title", "Заголовок не установлен");
+            postAddResponse.setErrors(error);
+        } else if (text.length() < 50) {
+            postAddResponse.setResult(false);
+            error.put("text", "Текст публикации слишком короткий");
+            postAddResponse.setErrors(error);
+        } else {
+            postAddResponse.setResult(true);
+
+            addPostToDB(timestamp, isActive, title, tags, text, authCoocie);
+        }
+
+        return postAddResponse;
+    }
+
+    private Date searchTimeForPost(Timestamp timestamp) {
+        if (timestamp.getTime() * 1000 < System.currentTimeMillis()) {
+            return new Date(System.currentTimeMillis());
+        } else {
+            return new Date(timestamp.getTime() * 1000);
+        }
+    }
+
+    private void addPostToDB(Timestamp timestamp, int isActive, String title, List<String> tags, String text, String authCoocie) {
+        Post post = new Post();
+        post.setIs_active(isActive);
+        post.setModeration_status("NEW");
+        post.setText(text);
+
+        //Создаем в БД Пост
+        post.setTime(searchTimeForPost(timestamp));
+        post.setTitle(title);
+        post.setView_count(0);
+        int id = LoginService.sessions.get(authCoocie);
+        User user = new User();
+        user.setId(id);
+        post.setUser(user);
+        postRepository.save(post);
+
+        //Сохраняем в БД для поста лайки
+        PostVotes postVotes = new PostVotes();
+        postVotes.setTime(new Date(System.currentTimeMillis()));
+        postVotes.setValue(0);
+        postVotes.setPost(post);
+        postVotes.setUser(user);
+        postVotesRepository.save(postVotes);
+
+        //Сохранаяем в БД Тэги
+        for (int i = 0; i < tags.size(); i++) {
+            Tag tag = new Tag();
+            Tag2post tag2post = new Tag2post();
+
+            int searchTag = tagRepository.findTag(tags.get(i)).size();
+            if (searchTag > 0) {
+                tag.setId(tagRepository.findTag(tags.get(i)).get(0));
+                tag2post.setPost(post);
+                tag2post.setTag(tag);
+                tag2postRepository.save(tag2post);
+            } else {
+                tag.setName(tags.get(i));
+                tagRepository.save(tag);
+
+                tag2post.setPost(post);
+                tag2post.setTag(tag);
+                tag2postRepository.save(tag2post);
+            }
+        }
+    }
+
+    public PostAddResponse editPost(Timestamp timestamp, int isActive, String title, List<String> tags, String text, String authCoocie, int idPost) {
+        PostAddResponse postAddResponse = new PostAddResponse();
+
+        Map<String, String> error = new HashMap<>();
+
+        if (title.length() < 3) {
+            postAddResponse.setResult(false);
+            error.put("title", "Заголовок не установлен");
+            postAddResponse.setErrors(error);
+        } else if (text.length() < 50) {
+            postAddResponse.setResult(false);
+            error.put("text", "Текст публикации слишком короткий");
+            postAddResponse.setErrors(error);
+        } else {
+            postAddResponse.setResult(true);
+
+            editPostToDB(timestamp, isActive, title, tags, text, authCoocie, idPost);
+        }
+
+        return postAddResponse;
+    }
+
+    private void editPostToDB(Timestamp timestamp, int isActive, String title, List<String> tags, String text, String authCoocie, int idPost) {
+
+        int id = LoginService.sessions.get(authCoocie);
+
+        if (usersRepository.findUserInfo(id).getIs_moderator() == 1) {
+            postRepository.editPostModerator(idPost, isActive, text, searchTimeForPost(timestamp), title);
+        } else {
+            postRepository.editPostUser(idPost, isActive, text, searchTimeForPost(timestamp), title);
+        }
+
+        //Сохранаяем в БД Тэги
+        Post post = new Post();
+        post.setId(idPost);
+        for (int i = 0; i < tags.size(); i++) {
+            Tag tag = new Tag();
+            Tag2post tag2post = new Tag2post();
+
+            int searchTag = tagRepository.findTag(tags.get(i)).size();
+            if (searchTag > 0) {
+                tag.setId(tagRepository.findTag(tags.get(i)).get(0));
+                tag2post.setPost(post);
+                tag2post.setTag(tag);
+                tag2postRepository.save(tag2post);
+            } else {
+                tag.setName(tags.get(i));
+                tagRepository.save(tag);
+
+                tag2post.setPost(post);
+                tag2post.setTag(tag);
+                tag2postRepository.save(tag2post);
+            }
+        }
+
+    }
 
 }

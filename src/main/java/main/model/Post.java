@@ -12,16 +12,16 @@ public class Post {
 
     @Column(columnDefinition = "TINYINT")
     @NotNull
-    private String is_active;
+    private Integer is_active;
 
     @Column(columnDefinition = "ENUM(\"NEW\", \"ACCEPTED\", \"DECLINED\")")
     @NotNull
     private String moderation_status;
 
     @Column(columnDefinition = "INT")
-    private String moderator_id;
+    private Integer moderator_id;
 
-    @ManyToOne (optional=false, cascade=CascadeType.ALL)
+    @ManyToOne (fetch = FetchType.LAZY)
     private User user;
 
     @Column(columnDefinition = "DATETIME")
@@ -38,7 +38,7 @@ public class Post {
 
     @Column(columnDefinition = "INT")
     @NotNull
-    private String view_count;
+    private Integer view_count;
 
 
     public int getId() {
@@ -49,11 +49,11 @@ public class Post {
         this.id = id;
     }
 
-    public String getIs_active() {
+    public Integer getIs_active() {
         return is_active;
     }
 
-    public void setIs_active(String is_active) {
+    public void setIs_active(Integer is_active) {
         this.is_active = is_active;
     }
 
@@ -65,11 +65,11 @@ public class Post {
         this.moderation_status = moderation_status;
     }
 
-    public String getModerator_id() {
+    public Integer getModerator_id() {
         return moderator_id;
     }
 
-    public void setModerator_id(String moderator_id) {
+    public void setModerator_id(Integer moderator_id) {
         this.moderator_id = moderator_id;
     }
 
@@ -97,11 +97,11 @@ public class Post {
         this.text = text;
     }
 
-    public String getView_count() {
+    public Integer getView_count() {
         return view_count;
     }
 
-    public void setView_count(String view_count) {
+    public void setView_count(Integer view_count) {
         this.view_count = view_count;
     }
 

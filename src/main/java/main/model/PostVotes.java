@@ -2,6 +2,7 @@ package main.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Entity(name="post_votes")
 public class PostVotes {
@@ -9,15 +10,15 @@ public class PostVotes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne (optional=false, cascade=CascadeType.ALL)
+    @ManyToOne (fetch = FetchType.LAZY)
     private User user;
 
-    @ManyToOne (optional=false, cascade=CascadeType.ALL)
+    @ManyToOne (fetch = FetchType.LAZY)
     private Post post;
 
     @Column(columnDefinition = "DATETIME")
     @NotNull
-    private String time;
+    private Date time;
 
     @Column(columnDefinition = "TINYINT")
     @NotNull
@@ -31,11 +32,11 @@ public class PostVotes {
         this.id = id;
     }
 
-    public String getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 

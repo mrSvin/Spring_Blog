@@ -51,11 +51,11 @@ public class TagService {
         tagRepository.findAll().forEach(tagRepository -> tags.add(tagRepository.getName()));
 
         //Ищем наличие тэга в бд и определяем его id
-        String querySQL = tagRepository.findIdByName(query);
+        Integer querySQL = tagRepository.findIdByName(query);
         if (querySQL == null) {
             System.out.println("Запрос не найден");
         } else {
-            queryTagId = Integer.parseInt(querySQL) - 1;
+            queryTagId = querySQL - 1;
         }
 
         //Находим количество публикаций у каждого тэга

@@ -1,7 +1,5 @@
 package main.model;
 
-import org.hibernate.validator.constraints.UniqueElements;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -36,8 +34,9 @@ public class User
         return id;
     }
 
-    public void setId(int id) {
+    public User setId(int id) {
         this.id = id;
+        return null;
     }
 
     public int getIs_moderator() {

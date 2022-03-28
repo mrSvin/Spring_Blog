@@ -1,10 +1,15 @@
 package main.repository;
 
 import main.model.Post;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -81,6 +86,16 @@ public interface PostRepository extends CrudRepository<Post, Integer> {
             "where is_active = 0  AND id=?1 " +
             "limit ?2 offset ?3 ", nativeQuery = true)
     public List<Post> findMyPostByInactive(int id, int limit, int offset);
+
+    @Modifying
+    @Transactional
+    @Query("update posts p set p.text = :text, p.is_active = :isActive, p.time = :time, p.title = :title, p.moderation_status = 'NEW' where p.id = :id")
+    public void editPostUser(@Param("id") int postId, @Param("isActive") int isActive, @Param("text") String text, @Param("time") Date time, @Param("title") String title);
+
+    @Modifying
+    @Transactional
+    @Query("update posts p set p.text = :text, p.is_active = :isActive, p.time = :time, p.title = :title where p.id = :id")
+    public void editPostModerator(@Param("id") int postId, int isActive, @Param("text") String text, @Param("time") Date time, @Param("title") String title);
 
 }
 

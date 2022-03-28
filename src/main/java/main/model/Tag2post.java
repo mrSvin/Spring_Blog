@@ -8,10 +8,10 @@ public class Tag2post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne (optional=false, cascade=CascadeType.ALL)
+    @ManyToOne (fetch = FetchType.LAZY)
     private Post post;
 
-    @ManyToOne (optional=false, cascade=CascadeType.ALL)
+    @ManyToOne (fetch = FetchType.LAZY)
     private Tag tag;
 
     public int getId() {

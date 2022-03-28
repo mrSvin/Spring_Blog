@@ -1,5 +1,7 @@
 package main.controller;
 
+import main.api.request.PostAddRequest;
+import main.api.response.PostAddResponse;
 import main.api.response.PostCalendarDto;
 import main.api.response.PostsResponse;
 import main.service.*;
@@ -86,8 +88,24 @@ public class ApiPostController {
                                  @RequestParam(value = "offset", defaultValue = "0") int offset,
                                  @RequestParam(value = "limit", defaultValue = "10") int limit,
                                  @RequestParam(value = "status") String status
-                                 ) {
+    ) {
         return postService.getPostsMy(offset, limit, status, authCoocie);
     }
+
+    @PostMapping("/post")
+    private PostAddResponse addPost(@CookieValue(value = "auth") String authCoocie,
+                                    @RequestBody PostAddRequest postAddRequest) {
+        return postService.addPost(postAddRequest.getTimestamp(), postAddRequest.getActive(),
+                postAddRequest.getTitle(), postAddRequest.getTags(), postAddRequest.getText(), authCoocie);
+    }
+
+    @PutMapping("/post/{ID}")
+    private PostAddResponse editPost(@PathVariable int ID,
+                                     @CookieValue(value = "auth") String authCoocie,
+                                     @RequestBody PostAddRequest postAddRequest) {
+        return postService.editPost(postAddRequest.getTimestamp(), postAddRequest.getActive(),
+                postAddRequest.getTitle(), postAddRequest.getTags(), postAddRequest.getText(), authCoocie, ID);
+    }
+
 
 }
