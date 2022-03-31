@@ -1,6 +1,7 @@
 package main.controller;
 
 import main.api.request.CommentAddRequest;
+import main.api.request.LikeRequest;
 import main.api.request.PostAddRequest;
 import main.api.response.*;
 import main.service.*;
@@ -111,6 +112,20 @@ public class ApiPostController {
     private CommentAddResponse addComment(@CookieValue(value = "auth") String authCoocie,
                                           @RequestBody CommentAddRequest commentAddRequest) {
         return postService.addComment(commentAddRequest.getParentId(), commentAddRequest.getPostId(), commentAddRequest.getText(), authCoocie);
+    }
+
+    @PostMapping("/post/like")
+    private LikeResponse like (@CookieValue(value = "auth") String authCoocie,
+                               @RequestBody LikeRequest likeRequest) {
+
+        return postService.addLike(likeRequest.getPostId(), authCoocie);
+    }
+
+    @PostMapping("/post/dislike")
+    private LikeResponse dislike (@CookieValue(value = "auth") String authCoocie,
+                               @RequestBody LikeRequest likeRequest) {
+
+        return postService.addDislike(likeRequest.getPostId(), authCoocie);
     }
 
 

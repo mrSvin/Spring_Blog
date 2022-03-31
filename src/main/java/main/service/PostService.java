@@ -237,7 +237,7 @@ public class PostService {
 
         for (int i =0; i<postCommentRepository.findCommentByPostId(id).size(); i++) {
             PostCommentDto postCommentDto = new PostCommentDto();
-            PostComment postComment = postCommentRepository.findCommentByPostId(id).get(0);
+            PostComment postComment = postCommentRepository.findCommentByPostId(id).get(i);
 
             postCommentDto.setId(postComment.getId());
             postCommentDto.setTimestamp(postComment.getTime().getTime() / 1000);
@@ -457,7 +457,7 @@ public class PostService {
         int id = LoginService.sessions.get(authCoocie);
 
         int intParentId;
-        if (parentId.equals("")) {
+        if (parentId == null) {
             intParentId=0;
         } else {
             intParentId=Integer.parseInt(parentId);
@@ -471,13 +471,13 @@ public class PostService {
             commentAddResponse.setResult(false);
             errors.put("text","Данного поста не существует");
             commentAddResponse.setErrors(errors);
-        } else if (postCommentRepository.findCommentId(intParentId).size() == 0 && parentId.equals("")==false) {
+        } else if (postCommentRepository.findCommentId(intParentId).size() == 0 && parentId != null) {
             commentAddResponse.setResult(false);
             errors.put("text","Данного комментария не существует");
             commentAddResponse.setErrors(errors);
         } else {
             Date timeComment = new Date(System.currentTimeMillis());
-            if (parentId.equals("")) {
+            if (parentId == null) {
                 postCommentRepository.addCommentPost(text, timeComment, id, postId);
             } else {
                 postCommentRepository.addCommentParent(text, timeComment, id, postId, Integer.valueOf(parentId));
@@ -489,6 +489,42 @@ public class PostService {
         }
 
     return commentAddResponse;
+    }
+
+    public LikeResponse addLike(int postId, String authCoocie) {
+        LikeResponse likeResponse = new LikeResponse();
+        int id = LoginService.sessions.get(authCoocie);
+
+        if (postVotesRepository.findUserVotesLikes(postId, 1, id)==0 && postVotesRepository.findUserVotesLikes(postId, -1, id)==0) {
+            Date timeLike = new Date(System.currentTimeMillis());
+            postVotesRepository.addLike(timeLike,1, postId, id);
+            likeResponse.setResult(true);
+        } else if (postVotesRepository.findUserVotesLikes(postId, 1, id)==1 && postVotesRepository.findUserVotesLikes(postId, -1, id)==0) {
+            likeResponse.setResult(false);
+        } else if (postVotesRepository.findUserVotesLikes(postId, 1, id)==0 && postVotesRepository.findUserVotesLikes(postId, -1, id)==1) {
+            postVotesRepository.changeLike(1, postId, id);
+            likeResponse.setResult(true);
+        }
+
+        return likeResponse;
+    }
+
+    public LikeResponse addDislike(int postId, String authCoocie) {
+        LikeResponse likeResponse = new LikeResponse();
+        int id = LoginService.sessions.get(authCoocie);
+
+        if (postVotesRepository.findUserVotesLikes(postId, 1, id)==0 && postVotesRepository.findUserVotesLikes(postId, -1, id)==0) {
+            Date timeLike = new Date(System.currentTimeMillis());
+            postVotesRepository.addLike(timeLike,-1, postId, id);
+            likeResponse.setResult(true);
+        } else if (postVotesRepository.findUserVotesLikes(postId, 1, id)==0 && postVotesRepository.findUserVotesLikes(postId, -1, id)==1) {
+            likeResponse.setResult(false);
+        } else if (postVotesRepository.findUserVotesLikes(postId, 1, id)==1 && postVotesRepository.findUserVotesLikes(postId, -1, id)==0) {
+            postVotesRepository.changeLike(-1, postId, id);
+            likeResponse.setResult(true);
+        }
+
+        return likeResponse;
     }
 
 }

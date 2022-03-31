@@ -34,7 +34,8 @@ public class CalendarService {
 
         }
         postCalendarDto.setPosts(calendar);
-        postCalendarDto.setYears(year);
+        List<Integer> yearsList = postRepository.findYearsForCalendar();
+        postCalendarDto.setYears(yearsList);
 
         return postCalendarDto;
     }

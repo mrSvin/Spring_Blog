@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class PostCalendarDto {
 
-    private Integer years;
+    private List<Integer> years;
     private Map<String, Integer> posts;
 
     public Map<String, Integer> getPosts() {
@@ -17,10 +17,10 @@ public class PostCalendarDto {
         this.posts = posts;
     }
 
-    public Integer getYears() {
+    public List<Integer> getYears() {
         return years;
     }
-    public void setYears(Integer years) {
+    public void setYears(List<Integer> years) {
         this.years = years;
     }
 

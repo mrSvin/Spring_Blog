@@ -67,7 +67,6 @@ public interface PostRepository extends CrudRepository<Post, Integer> {
             "limit ?2 offset ?3", nativeQuery = true)
     public List<Post> findByTag(String tag, int limit, int offset);
 
-
     @Query(value="SELECT * FROM skillbox_blog.posts " +
             "where is_active = 1 AND moderation_status = ?1 " +
             "limit ?2 offset ?3", nativeQuery = true)
@@ -99,6 +98,9 @@ public interface PostRepository extends CrudRepository<Post, Integer> {
     @Query(value="SELECT * FROM skillbox_blog.posts " +
             "where id=?1", nativeQuery = true)
     public List<Post> findPostId(int idPost);
+
+    @Query(value="SELECT  year(time) FROM skillbox_blog.posts group by year(time)", nativeQuery = true)
+    public List<Integer> findYearsForCalendar();
 
 }
 

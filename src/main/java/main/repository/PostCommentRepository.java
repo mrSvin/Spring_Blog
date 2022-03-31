@@ -20,7 +20,6 @@ public interface PostCommentRepository extends CrudRepository<PostComment, Integ
 
     @Modifying
     @Transactional
-    //INSERT INTO `skillbox_blog`.`post_comments` (`text`, `time`, `user_id`, `post_id`) VALUES ('1', '2012-01-26 00:00:00', '2', '3')
     @Query(value = "INSERT INTO `skillbox_blog`.`post_comments` (`text`, `time`, `user_id`, `post_id`) " +
             "VALUES (?1, ?2, ?3, ?4)", nativeQuery = true)
     public void addCommentPost(@Param("text") String text, @Param("time") Date time, @Param("userId") Integer userId, @Param("postId") Integer postId);
