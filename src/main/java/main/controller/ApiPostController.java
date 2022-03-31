@@ -1,15 +1,15 @@
 package main.controller;
 
+import main.api.request.CommentAddRequest;
 import main.api.request.PostAddRequest;
-import main.api.response.PostAddResponse;
-import main.api.response.PostCalendarDto;
-import main.api.response.PostsResponse;
+import main.api.response.*;
 import main.service.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -69,7 +69,7 @@ public class ApiPostController {
     }
 
     @GetMapping("/post/{ID}")
-    private PostsResponse PostbyId(@PathVariable int ID
+    private PostInfoResponse PostbyId(@PathVariable int ID
     ) {
         return postService.getPostsById(ID);
     }
@@ -105,6 +105,12 @@ public class ApiPostController {
                                      @RequestBody PostAddRequest postAddRequest) {
         return postService.editPost(postAddRequest.getTimestamp(), postAddRequest.getActive(),
                 postAddRequest.getTitle(), postAddRequest.getTags(), postAddRequest.getText(), authCoocie, ID);
+    }
+
+    @PostMapping("/comment")
+    private CommentAddResponse addComment(@CookieValue(value = "auth") String authCoocie,
+                                          @RequestBody CommentAddRequest commentAddRequest) {
+        return postService.addComment(commentAddRequest.getParentId(), commentAddRequest.getPostId(), commentAddRequest.getText(), authCoocie);
     }
 
 

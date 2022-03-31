@@ -1,8 +1,6 @@
 package main.service;
 
-import main.api.response.PostAddResponse;
-import main.api.response.PostDetailsDto;
-import main.api.response.PostsResponse;
+import main.api.response.*;
 import main.model.*;
 import main.repository.*;
 import org.springframework.stereotype.Service;
@@ -89,14 +87,13 @@ public class PostService {
         postDetailsDto.setAnnounce(annotation);
         postDetailsDto.setViewCount(post.getView_count());
 
-        int likeCount = postVotesRepository.findMyPostVotesValue(post.getId());
-        if (likeCount > 0) {
+        //Cчитаем лайки и дислайки
+        int likeCount = postVotesRepository.findMyPostVotesLikes(post.getId(),1);
+        int dislikeCount = postVotesRepository.findMyPostVotesLikes(post.getId(),-1);
+
             postDetailsDto.setLikeCount(likeCount);
-            postDetailsDto.setDislikeCount(0);
-        } else {
-            postDetailsDto.setLikeCount(0);
-            postDetailsDto.setDislikeCount(Math.abs(likeCount));
-        }
+            postDetailsDto.setDislikeCount(dislikeCount);
+
 
         List<Post> postCommentPost = new ArrayList<>();
         postCommentRepository.findAll().forEach(postCommentRepository -> postCommentPost.add(postCommentRepository.getPost()));
@@ -190,28 +187,71 @@ public class PostService {
         return result;
     }
 
-    public PostsResponse getPostsById(int id) {
-        PostsResponse postsResponse = new PostsResponse();
+    public PostInfoResponse getPostsById(int id) {
 
-        //Собираем сущности DTO
-        List<PostDetailsDto> dto = getPostById(id);
-        //Выдаем ответ с количеством постов
-        int countPost = dto.size();
-        postsResponse.setCounts(countPost);
-        postsResponse.setPosts(dto);
+        PostInfoResponse postInfoResponse = new PostInfoResponse();
+        Post postInfo = postRepository.findPostId(id).get(0);
 
-        return postsResponse;
+        postInfoResponse.setId(id);
+
+        Date datePost = postInfo.getTime();
+        postInfoResponse.setTimestamp(datePost.getTime()/1000);
+
+        if ((postInfo.getIs_active() == 1)) {
+            postInfoResponse.setActive(true);
+        } else {
+            postInfoResponse.setActive(false);
+        }
+
+        Map<String, Object> userDetail = new HashMap<>();
+        userDetail.put("id", postInfo.getUser().getId());
+        userDetail.put("name", postInfo.getUser().getName());
+        postInfoResponse.setUser(userDetail);
+
+        postInfoResponse.setTitle(postInfo.getTitle());
+
+        postInfoResponse.setText(postInfo.getText());
+
+        postInfoResponse.setLikeCount(postVotesRepository.findMyPostVotesLikes(id, 1));
+
+        postInfoResponse.setDislikeCount(postVotesRepository.findMyPostVotesLikes(id, -1));
+
+        postInfoResponse.setViewCount(postInfo.getView_count());
+
+        postInfoResponse.setComments(getPostCommentsDTO(id));
+
+        List<String> tagsName = new ArrayList<>();
+        List<Integer> tagsId  = tag2postRepository.findTagsByPostId(id);
+        for (int i=0; i< tagsId.size(); i++) {
+            String tagName = tagRepository.findTagsById(tagsId.get(i));
+            tagsName.add(tagName);
+        }
+        postInfoResponse.setTags(tagsName);
+
+        return postInfoResponse;
     }
 
-    public List<PostDetailsDto> getPostById(int id) {
+    public List<PostCommentDto> getPostCommentsDTO(int id) {
 
-        List<PostDetailsDto> result;
-        result = (postRepository.findById(id))
-                .stream()
-                .map(this::postDetailsDTO)
-                .collect(Collectors.toList());
+        List<PostCommentDto> listComments = new ArrayList<>();
 
-        return result;
+        for (int i =0; i<postCommentRepository.findCommentByPostId(id).size(); i++) {
+            PostCommentDto postCommentDto = new PostCommentDto();
+            PostComment postComment = postCommentRepository.findCommentByPostId(id).get(0);
+
+            postCommentDto.setId(postComment.getId());
+            postCommentDto.setTimestamp(postComment.getTime().getTime() / 1000);
+            postCommentDto.setText(postComment.getText());
+
+            Map<String, Object> userDetail = new HashMap<>();
+            userDetail.put("id", postComment.getUser().getId());
+            userDetail.put("name", postComment.getUser().getName());
+            postCommentDto.setUser(userDetail);
+
+            listComments.add(postCommentDto);
+        }
+
+        return listComments;
     }
 
     public PostsResponse getPostsByModeration(int offset, int limit, String status) {
@@ -332,14 +372,6 @@ public class PostService {
         post.setUser(user);
         postRepository.save(post);
 
-        //Сохраняем в БД для поста лайки
-        PostVotes postVotes = new PostVotes();
-        postVotes.setTime(new Date(System.currentTimeMillis()));
-        postVotes.setValue(0);
-        postVotes.setPost(post);
-        postVotes.setUser(user);
-        postVotesRepository.save(postVotes);
-
         //Сохранаяем в БД Тэги
         for (int i = 0; i < tags.size(); i++) {
             Tag tag = new Tag();
@@ -417,6 +449,46 @@ public class PostService {
             }
         }
 
+    }
+
+    public CommentAddResponse addComment(String parentId, Integer postId, String text, String authCoocie) {
+        CommentAddResponse commentAddResponse = new CommentAddResponse();
+        Map<String,String> errors= new HashMap<>();
+        int id = LoginService.sessions.get(authCoocie);
+
+        int intParentId;
+        if (parentId.equals("")) {
+            intParentId=0;
+        } else {
+            intParentId=Integer.parseInt(parentId);
+        }
+
+        if (text.length()<5) {
+            commentAddResponse.setResult(false);
+            errors.put("text","Текст комментария не задан или слишком короткий");
+            commentAddResponse.setErrors(errors);
+        } else if (postRepository.findPostId(postId).size()==0) {
+            commentAddResponse.setResult(false);
+            errors.put("text","Данного поста не существует");
+            commentAddResponse.setErrors(errors);
+        } else if (postCommentRepository.findCommentId(intParentId).size() == 0 && parentId.equals("")==false) {
+            commentAddResponse.setResult(false);
+            errors.put("text","Данного комментария не существует");
+            commentAddResponse.setErrors(errors);
+        } else {
+            Date timeComment = new Date(System.currentTimeMillis());
+            if (parentId.equals("")) {
+                postCommentRepository.addCommentPost(text, timeComment, id, postId);
+            } else {
+                postCommentRepository.addCommentParent(text, timeComment, id, postId, Integer.valueOf(parentId));
+            }
+
+            commentAddResponse.setResult(true);
+            commentAddResponse.setId(345);
+
+        }
+
+    return commentAddResponse;
     }
 
 }

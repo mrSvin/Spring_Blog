@@ -11,8 +11,8 @@ import java.util.List;
 @Repository
 public interface PostVotesRepository extends CrudRepository<PostVotes, Integer> {
 
-    @Query(value="SELECT value FROM skillbox_blog.post_votes where post_id=?1", nativeQuery = true)
-    public Integer findMyPostVotesValue(int postId);
+    @Query(value="SELECT COUNT(value) FROM skillbox_blog.post_votes  where post_id =?1 AND value =?2", nativeQuery = true)
+    public Integer findMyPostVotesLikes(int postId, int typeLike);
 
 }
 

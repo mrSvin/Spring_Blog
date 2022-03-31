@@ -67,7 +67,6 @@ public interface PostRepository extends CrudRepository<Post, Integer> {
             "limit ?2 offset ?3", nativeQuery = true)
     public List<Post> findByTag(String tag, int limit, int offset);
 
-    public List<Post> findById(int id);
 
     @Query(value="SELECT * FROM skillbox_blog.posts " +
             "where is_active = 1 AND moderation_status = ?1 " +
@@ -96,6 +95,10 @@ public interface PostRepository extends CrudRepository<Post, Integer> {
     @Transactional
     @Query("update posts p set p.text = :text, p.is_active = :isActive, p.time = :time, p.title = :title where p.id = :id")
     public void editPostModerator(@Param("id") int postId, int isActive, @Param("text") String text, @Param("time") Date time, @Param("title") String title);
+
+    @Query(value="SELECT * FROM skillbox_blog.posts " +
+            "where id=?1", nativeQuery = true)
+    public List<Post> findPostId(int idPost);
 
 }
 

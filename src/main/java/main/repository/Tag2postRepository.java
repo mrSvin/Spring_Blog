@@ -22,6 +22,8 @@ public interface Tag2postRepository extends CrudRepository<Tag2post, Integer> {
     @Query(value="SELECT ?1 / COUNT(post_id) FROM skillbox_blog.tag2post group by tag_id", nativeQuery = true)
     List<Double> findKoefTag(double maxWeightTag);
 
+    @Query(value="SELECT tag_id FROM skillbox_blog.tag2post where post_id=?1  group by tag_id", nativeQuery = true)
+    List<Integer> findTagsByPostId(int postId);
 
 }
 
