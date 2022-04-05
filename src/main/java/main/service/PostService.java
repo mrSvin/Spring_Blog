@@ -187,7 +187,7 @@ public class PostService {
         return result;
     }
 
-    public PostInfoResponse getPostsById(int id) {
+    public PostInfoResponse getPostsById(int id, String authCoocie) {
 
         PostInfoResponse postInfoResponse = new PostInfoResponse();
         Post postInfo = postRepository.findPostId(id).get(0);
@@ -227,6 +227,18 @@ public class PostService {
             tagsName.add(tagName);
         }
         postInfoResponse.setTags(tagsName);
+
+        //Добавляем просмотр если юзер не модератор и это не автор
+        try {
+            int idUser = LoginService.sessions.get(authCoocie);
+            System.out.println(usersRepository.findUserInfo(idUser).getIs_moderator());
+            System.out.println(postRepository.countMyPostsId(idUser, id));
+
+            if (usersRepository.findUserInfo(idUser).getIs_moderator() == 0 && postRepository.countMyPostsId(idUser, id) == 0) {
+                postRepository.addView(id);
+            }
+        } catch (Exception e) {}
+
 
         return postInfoResponse;
     }

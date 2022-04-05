@@ -102,5 +102,31 @@ public interface PostRepository extends CrudRepository<Post, Integer> {
     @Query(value="SELECT  year(time) FROM skillbox_blog.posts group by year(time)", nativeQuery = true)
     public List<Integer> findYearsForCalendar();
 
+    @Query(value="SELECT COUNT(*) FROM skillbox_blog.posts where user_id = ?1", nativeQuery = true)
+    public Integer countMyPosts(int idUser);
+
+    @Query(value="SELECT COUNT(*) FROM skillbox_blog.posts where user_id = ?1 and id = ?2", nativeQuery = true)
+    public Integer countMyPostsId(int idUser, int idPost);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE `skillbox_blog`.`posts` SET `view_count` = `view_count`+1 WHERE (`id` = ?1)", nativeQuery = true)
+    public void addView(@Param("postId") Integer postId);
+
+    @Query(value="SELECT count(view_count) FROM skillbox_blog.posts where user_id = ?1", nativeQuery = true)
+    public Integer countViewsMyPosts(int idUser);
+
+    @Query(value="SELECT min(time) FROM skillbox_blog.posts where user_id = ?1", nativeQuery = true)
+    public Date firstMyPost(int idUser);
+
+    @Query(value="SELECT COUNT(*) FROM skillbox_blog.posts", nativeQuery = true)
+    public Integer countAllPosts();
+
+    @Query(value="SELECT count(view_count) FROM skillbox_blog.posts", nativeQuery = true)
+    public Integer countViewsAllPosts();
+
+    @Query(value="SELECT min(time) FROM skillbox_blog.posts", nativeQuery = true)
+    public Date firstPost();
+
 }
 

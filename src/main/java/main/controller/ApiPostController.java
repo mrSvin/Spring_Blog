@@ -70,9 +70,10 @@ public class ApiPostController {
     }
 
     @GetMapping("/post/{ID}")
-    private PostInfoResponse PostbyId(@PathVariable int ID
+    private PostInfoResponse PostbyId(@CookieValue(value = "auth") String authCoocie,
+                                      @PathVariable int ID
     ) {
-        return postService.getPostsById(ID);
+        return postService.getPostsById(ID, authCoocie);
     }
 
     @GetMapping("/post/moderation")
