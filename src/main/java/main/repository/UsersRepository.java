@@ -1,10 +1,13 @@
 package main.repository;
 
 import main.model.User;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -18,5 +21,10 @@ public interface UsersRepository extends CrudRepository<User, Integer> {
 
     @Query(value="SELECT * FROM skillbox_blog.users where id = ?1", nativeQuery = true)
     public User findUserInfo(int id);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE `skillbox_blog`.`users` SET `email` = ?1, `name` = ?2, `password` = ?3, `photo` = ?4 WHERE (`id` = ?5)", nativeQuery = true)
+    public void changeProfile(@Param("email") String email, @Param("name") String name, @Param("password") String password, @Param("photo") String photo, @Param("userId") int userId);
 
 }

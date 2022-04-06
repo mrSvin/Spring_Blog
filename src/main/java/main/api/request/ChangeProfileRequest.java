@@ -6,19 +6,10 @@ import java.io.File;
 
 public class ChangeProfileRequest {
 
-    private MultipartFile photo;
     private String name = "";
     private String email = "";
     private String password = "";
     private Integer removePhoto = 0;
-
-    public MultipartFile getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(MultipartFile photo) {
-        this.photo = photo;
-    }
 
     public String getName() {
         return name;

@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
@@ -70,8 +72,9 @@ public class ApiGeneralController {
     //@PostMapping("/profile/my", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @RequestMapping(path = "/profile/my", method = POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     private ChangeProfileResponse profileMy(@CookieValue(value = "auth") String authCoocie,
-                                            @RequestBody ChangeProfileRequest changeProfileRequest) {
-        return profileService.changeProfile(authCoocie, changeProfileRequest.getPhoto(), changeProfileRequest.getEmail(),
+                                            @RequestPart("photo") MultipartFile photo,
+                                            @ModelAttribute ChangeProfileRequest changeProfileRequest) throws IOException {
+        return profileService.changeProfile(authCoocie, photo, changeProfileRequest.getEmail(),
                 changeProfileRequest.getName(), changeProfileRequest.getPassword(),
                 changeProfileRequest.getRemovePhoto());
 
