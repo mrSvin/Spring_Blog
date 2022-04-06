@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class ProfileService {
@@ -32,19 +33,19 @@ public class ProfileService {
 
         Map<String, String> error = new HashMap<>();
 
-        if (usersRepository.findByEmail(email).size()>0) {
+        if (usersRepository.findByEmail(email).size() > 0) {
             changeProfileResponse.setResult(false);
             error.put("email", "Этот e-mail уже зарегистрирован");
             changeProfileResponse.setErrors(error);
-        } else if (photo.getSize()>5242880) {
+        } else if (photo.getSize() > 5242880) {
             changeProfileResponse.setResult(false);
             error.put("photo", "Фото слишком большое, нужно не более 5 Мб");
             changeProfileResponse.setErrors(error);
-        } else if (name.length()<3) {
+        } else if (name.length() < 3) {
             changeProfileResponse.setResult(false);
             error.put("name", "Имя указано неверно");
             changeProfileResponse.setErrors(error);
-        } else if (password.length()<6) {
+        } else if (password.length() < 6) {
             changeProfileResponse.setResult(false);
             error.put("password", "Пароль короче 6-ти символов");
             changeProfileResponse.setErrors(error);
@@ -55,19 +56,25 @@ public class ProfileService {
             byte[] buffer = new byte[initialStream.available()];
             initialStream.read(buffer);
 
-            File targetFile = new File("src/main/resources/static/imagesProfile/test.bmp");
+            String nameImage = randomNameGeneration();
+            File targetFile = new File("src/main/resources/public/imagesProfile/" + nameImage + ".bmp");
 
             try (OutputStream outStream = new FileOutputStream(targetFile)) {
                 outStream.write(buffer);
             }
 
-            usersRepository.changeProfile(email, name, password, "http://localhost:8081/imagesProfile/test.bmp", idUser);
+            usersRepository.changeProfile(email, name, password, "http://localhost:8081/imagesProfile/" + nameImage + ".bmp", idUser);
 
 
         }
 
+        return changeProfileResponse;
+    }
 
-        return  changeProfileResponse;
+    public String randomNameGeneration() {
+        String uuid = UUID.randomUUID().toString();
+        return uuid;
+
     }
 
 }
