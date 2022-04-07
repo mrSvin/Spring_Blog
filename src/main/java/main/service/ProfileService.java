@@ -28,15 +28,9 @@ public class ProfileService {
 
         int idUser = LoginService.sessions.get(authCoocie);
 
-        System.out.println("Size " + photo.getSize());
-        System.out.println(email);
-        System.out.println(name);
-        System.out.println(password);
-        System.out.println(removePhoto);
-
         Map<String, String> error = new HashMap<>();
 
-        if (usersRepository.findByEmail(email).size() > 0) {
+        if (usersRepository.findByEmailAndId(email, idUser).size() > 0) {
             changeProfileResponse.setResult(false);
             error.put("email", "Этот e-mail уже зарегистрирован");
             changeProfileResponse.setErrors(error);
@@ -60,6 +54,38 @@ public class ProfileService {
 
             usersRepository.changeProfile(email, name, password, "http://localhost:8081/imagesProfile/" + nameImage + ".bmp", idUser);
 
+        }
+
+        return changeProfileResponse;
+    }
+
+    public ChangeProfileResponse changeProfileNoPhoto(String authCoocie, String email,
+                                               String name, String password, Integer removePhoto) throws IOException {
+        ChangeProfileResponse changeProfileResponse = new ChangeProfileResponse();
+
+        int idUser = LoginService.sessions.get(authCoocie);
+
+        Map<String, String> error = new HashMap<>();
+
+        if (usersRepository.findByEmailAndId(email, idUser).size() > 0) {
+            changeProfileResponse.setResult(false);
+            error.put("email", "Этот e-mail уже зарегистрирован");
+            changeProfileResponse.setErrors(error);
+        } else if (name.length() < 3) {
+            changeProfileResponse.setResult(false);
+            error.put("name", "Имя указано неверно");
+            changeProfileResponse.setErrors(error);
+        } else if (password.length() < 6) {
+            changeProfileResponse.setResult(false);
+            error.put("password", "Пароль короче 6-ти символов");
+            changeProfileResponse.setErrors(error);
+        } else {
+            changeProfileResponse.setResult(true);
+            if (removePhoto == 1) {
+                usersRepository.changeProfile(email, name, password, "", idUser);
+            } else {
+                usersRepository.changeProfileNoPhoto(email, name, password, idUser);
+            }
 
         }
 

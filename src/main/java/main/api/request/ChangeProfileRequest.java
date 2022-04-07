@@ -6,11 +6,11 @@ import java.io.File;
 
 public class ChangeProfileRequest {
 
-    private String name = "";
-    private String email = "";
-    private String password = "";
+    private String name;
+    private String email;
+    private String password;
     private Integer removePhoto = 0;
-
+    
     public String getName() {
         return name;
     }

@@ -69,15 +69,21 @@ public class ApiGeneralController {
         return statistcService.allStatistic();
     }
 
-    //@PostMapping("/profile/my", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @RequestMapping(path = "/profile/my", method = POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     private ChangeProfileResponse profileMy(@CookieValue(value = "auth") String authCoocie,
-                                            @RequestPart("photo") MultipartFile photo,
+                                            @RequestPart(value = "photo") MultipartFile photo,
                                             @ModelAttribute ChangeProfileRequest changeProfileRequest) throws IOException {
         return profileService.changeProfile(authCoocie, photo, changeProfileRequest.getEmail(),
                 changeProfileRequest.getName(), changeProfileRequest.getPassword(),
                 changeProfileRequest.getRemovePhoto());
+    }
 
+    @RequestMapping(path = "/profile/my", method = POST)
+    private ChangeProfileResponse profileMyNoPhoto(@CookieValue(value = "auth") String authCoocie,
+                                            @RequestBody ChangeProfileRequest changeProfileRequest) throws IOException {
+        return profileService.changeProfileNoPhoto(authCoocie, changeProfileRequest.getEmail(),
+                changeProfileRequest.getName(), changeProfileRequest.getPassword(),
+                changeProfileRequest.getRemovePhoto());
     }
 
 }
