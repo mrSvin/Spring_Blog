@@ -52,7 +52,7 @@ public class ProfileService {
             String nameImage = randomNameGeneration();
             writeImageInServer(photo, nameImage);
 
-            usersRepository.changeProfile(email, name, password, "http://localhost:8081/imagesProfile/" + nameImage + ".bmp", idUser);
+            usersRepository.changeProfile(email, name, password, "http://localhost:8081/upload/" + nameImage + ".png", idUser);
 
         }
 
@@ -109,7 +109,7 @@ public class ProfileService {
         BufferedImage outputImage = new BufferedImage(36, 36, BufferedImage.TYPE_INT_RGB);
         outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
 
-        ImageIO.write(outputImage, "bmp", new File("src/main/resources/public/imagesProfile/" + nameImage + ".bmp"));
+        ImageIO.write(outputImage, "png", new File("src/main/resources/upload/" + nameImage + ".png"));
 
     }
 
