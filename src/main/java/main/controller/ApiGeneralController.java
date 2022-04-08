@@ -1,10 +1,11 @@
 package main.controller;
 
 import main.api.request.ChangeProfileRequest;
+import main.api.request.ModerationRequest;
+import main.api.request.SettingsRequest;
 import main.api.response.*;
 import main.service.*;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,15 +21,19 @@ public class ApiGeneralController {
     private final AuthCheckService authCheckService;
     private final StatistcService statistcService;
     private final ProfileService profileService;
+    private final ModerationService moderationService;
     InitResponseDto initResponseDto = new InitResponseDto();
 
     private final TagService tagService;
 
-    public ApiGeneralController(SettingsService settingsService, AuthCheckService authCheckService, StatistcService statistcService, ProfileService profileService, TagService tagService) {
+    public ApiGeneralController(SettingsService settingsService, AuthCheckService authCheckService,
+                                StatistcService statistcService, ProfileService profileService,
+                                ModerationService moderationService, TagService tagService) {
         this.settingsService = settingsService;
         this.authCheckService = authCheckService;
         this.statistcService = statistcService;
         this.profileService = profileService;
+        this.moderationService = moderationService;
         this.tagService = tagService;
     }
 
@@ -84,6 +89,19 @@ public class ApiGeneralController {
         return profileService.changeProfileNoPhoto(authCoocie, changeProfileRequest.getEmail(),
                 changeProfileRequest.getName(), changeProfileRequest.getPassword(),
                 changeProfileRequest.getRemovePhoto());
+    }
+
+    @PostMapping("/moderation")
+    public AuthCheckResponse Restore(@CookieValue(value = "auth") String authCoocie,
+                                     @RequestBody ModerationRequest moderationRequest) {
+        return moderationService.decisionModeration(authCoocie, moderationRequest.getPostId(), moderationRequest.getDecision());
+    }
+
+    @PutMapping("/settings")
+    public LogoutResponse settings(@CookieValue(value = "auth") String authCoocie,
+                                   @RequestBody SettingsRequest settingsRequest) {
+        return settingsService.changeSettings(authCoocie, settingsRequest.getMultiUserMode(), settingsRequest.getPostPremoderation()
+                , settingsRequest.getStatisticsIsPublic());
     }
 
 }

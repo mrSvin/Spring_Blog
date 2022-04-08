@@ -128,5 +128,10 @@ public interface PostRepository extends CrudRepository<Post, Integer> {
     @Query(value="SELECT min(time) FROM skillbox_blog.posts", nativeQuery = true)
     public Date firstPost();
 
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE `skillbox_blog`.`posts` SET `moderation_status` = ?1 WHERE (`id` = ?2)", nativeQuery = true)
+    public void changeStatus(@Param("status") String status, @Param("postId") Integer postId);
+
 }
 

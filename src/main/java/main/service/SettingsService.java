@@ -1,8 +1,10 @@
 package main.service;
 
+import main.api.response.LogoutResponse;
 import main.api.response.SettingsResponse;
 import main.model.GlobalSetting;
 import main.repository.GlobalSettingsRepository;
+import main.repository.UsersRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,9 +14,11 @@ import java.util.List;
 public class SettingsService {
 
     private final GlobalSettingsRepository globalSettingsRepository;
+    private final UsersRepository usersRepository;
 
-    public SettingsService(GlobalSettingsRepository globalSettingsRepository) {
+    public SettingsService(GlobalSettingsRepository globalSettingsRepository, UsersRepository usersRepository) {
         this.globalSettingsRepository = globalSettingsRepository;
+        this.usersRepository = usersRepository;
     }
 
     public SettingsResponse getGlobalSettings() {
@@ -41,14 +45,35 @@ public class SettingsService {
         return "YES".equals(value);
     }
 
+    public LogoutResponse changeSettings(String authCoocie, boolean multiUserMode, boolean postPremoderation, boolean statisticsIsPublic) {
+        LogoutResponse logoutResponse = new LogoutResponse();
 
-//    public List<Global_settings> getGlobal_settings(int id) {
-//        Iterable<Global_settings> global_settingsIterable = global_settingsRepository.findAllById(id);
-//
-//        List<Global_settings> global_settings = new ArrayList<>();
-//        for (Global_settings global_setting : global_settingsIterable) {
-//            global_settings.add(global_setting);
-//        }
-//        return global_settings;
-//    }
+        int id = LoginService.sessions.get(authCoocie);
+        if (usersRepository.findUserInfo(id).getIs_moderator() == 1) {
+            if (multiUserMode==true) {
+                globalSettingsRepository.newSettings("YES", 1);
+            } else {
+                globalSettingsRepository.newSettings("NO", 1);
+            }
+
+            if (postPremoderation==true) {
+                globalSettingsRepository.newSettings("YES", 2);
+            } else {
+                globalSettingsRepository.newSettings("NO", 2);
+            }
+
+            if (statisticsIsPublic==true) {
+                globalSettingsRepository.newSettings("YES", 3);
+            } else {
+                globalSettingsRepository.newSettings("NO", 3);
+            }
+
+            logoutResponse.setResult(true);
+        } else {
+            logoutResponse.setResult(false);
+        }
+
+        return logoutResponse;
+    }
+
 }
