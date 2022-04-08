@@ -40,4 +40,12 @@ public interface UsersRepository extends CrudRepository<User, Integer> {
     @Query(value = "UPDATE `skillbox_blog`.`users` SET `code` = ?1 WHERE (`email` = ?2);", nativeQuery = true)
     public void changeCode(@Param("code") String code, @Param("email") String email);
 
+    @Query(value="SELECT code FROM skillbox_blog.users where code = ?1", nativeQuery = true)
+    public List<String> findByCode(String code);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE `skillbox_blog`.`users` SET `password` = ?1 WHERE (`code` = ?2);", nativeQuery = true)
+    public void newPassword(@Param("password") String password,  @Param("code") String code);
+
 }
