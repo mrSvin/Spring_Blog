@@ -1,12 +1,10 @@
-package main;
+package main.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
 
     /**
@@ -15,7 +13,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
 
-        registry.addResourceHandler("/upload/**").addResourceLocations("file:upload/");
+        String myExternalFilePath = "file:///D:/java/projects/skillbox/DIPLOM/blog/Spring_Blog/src/main/resources/upload/";
+        registry.addResourceHandler("/upload/**").addResourceLocations(myExternalFilePath);
 
     }
 }
