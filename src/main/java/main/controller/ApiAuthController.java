@@ -2,17 +2,15 @@ package main.controller;
 
 import com.github.cage.Cage;
 import com.github.cage.GCage;
+import main.api.request.ChangePasswordRequest;
 import main.api.request.LoginRequest;
 import main.api.request.RegisterRequest;
-import main.api.response.CaptchaResponse;
-import main.api.response.LoginResponse;
-import main.api.response.LogoutResponse;
-import main.api.response.RegisterResponse;
+import main.api.request.RestoreRequest;
+import main.api.response.*;
 import main.service.CaptchaService;
 import main.service.LoginService;
 import main.service.RegisterService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import main.service.RestorePasswordService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -26,11 +24,13 @@ public class ApiAuthController {
     private final CaptchaService captchaService;
     private final RegisterService registerService;
     private final LoginService loginService;
+    private final RestorePasswordService restorePasswordService;
 
-    public ApiAuthController(CaptchaService captchaService, RegisterService registerService, LoginService loginService) {
+    public ApiAuthController(CaptchaService captchaService, RegisterService registerService, LoginService loginService, RestorePasswordService restorePasswordService) {
         this.captchaService = captchaService;
         this.registerService = registerService;
         this.loginService = loginService;
+        this.restorePasswordService = restorePasswordService;
     }
 
     @GetMapping("/auth/captcha")
@@ -65,6 +65,17 @@ public class ApiAuthController {
         System.out.println(authCoocie);
         response.addCookie(cookie);
         return loginService.logout(authCoocie);
+    }
+
+    @PostMapping("/auth/restore")
+    public LogoutResponse Restore(@RequestBody RestoreRequest restoreRequest) {
+        return restorePasswordService.restorePassword(restoreRequest.getEmail());
+    }
+
+    @PostMapping("/auth/password")
+    public ChangeProfileResponse Restore(@RequestBody ChangePasswordRequest changePasswordRequest) {
+        return restorePasswordService.changePassword(changePasswordRequest.getCode(), changePasswordRequest.getPassword(),
+                changePasswordRequest.getCaptcha(), changePasswordRequest.getCaptchaSecret());
     }
 
 }

@@ -1,7 +1,5 @@
 package main.service;
 
-import main.repository.MailAuthRepository;
-
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -18,11 +16,10 @@ public class Sender {
         this.password = password;
 
         props = new Properties();
-        props.put("mail.smtp.host", "smtp.yandex.com");
-        props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", "465");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
     }
 
     public void send(String subject, String text, String toEmail){
