@@ -15,23 +15,23 @@ import java.util.List;
 @Repository
 public interface PostCommentRepository extends CrudRepository<PostComment, Integer> {
 
-    @Query(value="SELECT * FROM skillbox_blog.post_comments where id = ?1", nativeQuery = true)
+    @Query(value="SELECT * FROM post_comments where id = ?1", nativeQuery = true)
     public List<PostComment> findCommentId(int idComment);
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO `skillbox_blog`.`post_comments` (`text`, `time`, `user_id`, `post_id`) " +
+    @Query(value = "INSERT INTO `post_comments` (`text`, `time`, `user_id`, `post_id`) " +
             "VALUES (?1, ?2, ?3, ?4)", nativeQuery = true)
     public void addCommentPost(@Param("text") String text, @Param("time") Date time, @Param("userId") Integer userId, @Param("postId") Integer postId);
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO `skillbox_blog`.`post_comments` (`text`, `time`, `user_id`, `post_id`, `parent_id`) " +
+    @Query(value = "INSERT INTO `post_comments` (`text`, `time`, `user_id`, `post_id`, `parent_id`) " +
             "VALUES (?1, ?2, ?3, ?4, ?5)", nativeQuery = true)
     public void addCommentParent(@Param("text") String text, @Param("time") Date time, @Param("userId") Integer userId, @Param("postId") Integer postId,
                                  @Param("parentId") Integer parentId);
 
-    @Query(value="SELECT * FROM skillbox_blog.post_comments where post_id = ?1", nativeQuery = true)
+    @Query(value="SELECT * FROM post_comments where post_id = ?1", nativeQuery = true)
     public List<PostComment> findCommentByPostId(int idPost);
 
 }

@@ -4,6 +4,7 @@ import main.api.response.*;
 import main.model.*;
 import main.repository.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.util.*;

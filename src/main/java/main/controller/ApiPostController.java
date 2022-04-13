@@ -5,12 +5,13 @@ import main.api.request.LikeRequest;
 import main.api.request.PostAddRequest;
 import main.api.response.*;
 import main.service.*;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import java.io.IOException;
+
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 @RequestMapping("/api")
@@ -18,11 +19,13 @@ public class ApiPostController {
 
     private final PostService postService;
     private final CalendarService calendarService;
+    private final AddImageService addImageService;
 
-    public ApiPostController(PostService postService, CalendarService calendarService) {
+    public ApiPostController(PostService postService, CalendarService calendarService, AddImageService addImageService) {
 
         this.postService = postService;
         this.calendarService = calendarService;
+        this.addImageService = addImageService;
     }
 
     @GetMapping("/post")
@@ -129,5 +132,10 @@ public class ApiPostController {
         return postService.addDislike(likeRequest.getPostId(), authCoocie);
     }
 
+    @RequestMapping(path = "/image", method = POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    private Object addImage(@CookieValue(value = "auth") String authCoocie,
+                                     @RequestPart(value = "image") MultipartFile image) throws IOException {
+        return addImageService.addImage(authCoocie, image);
+    }
 
 }

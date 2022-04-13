@@ -15,7 +15,7 @@ public interface GlobalSettingsRepository extends CrudRepository<GlobalSetting, 
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE `skillbox_blog`.`global_settings` SET `value` = ?1 WHERE (`id` = ?2)", nativeQuery = true)
+    @Query(value = "UPDATE `global_settings` SET `value` = ?1 WHERE (`id` = ?2)", nativeQuery = true)
     public void newSettings(@Param("value") String value, @Param("id") Integer id);
 
 }

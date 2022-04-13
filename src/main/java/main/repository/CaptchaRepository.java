@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface CaptchaRepository extends CrudRepository<CaptchaCodes, Integer> {
 
-    @Query(value="SELECT id FROM skillbox_blog.captcha_codes where code = ?1 and secret_code=?2", nativeQuery = true)
+    @Query(value="SELECT id FROM captcha_codes where code = ?1 and secret_code=?2", nativeQuery = true)
     public List<String> findByCaptcha(String captcha, String captchaSecret);
 }

@@ -4,11 +4,11 @@ package main.api.response;
 public class InitResponseDto {
 
     private String title = "DevPub";
-    private String subtitle = "Blog for Skillbox";
+    private String subtitle = "Blog";
     private String phone = "333";
     private String email = "mail@mail.ru";
-    private String copyright = "Oksana";
-    private String copyrightFrom = "2022 Vasilieva";
+    private String copyright = "opensource";
+    private String copyrightFrom = "2022";
 
     public String getTitle() {
         return title;
