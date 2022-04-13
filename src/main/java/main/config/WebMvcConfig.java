@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.io.File;
+
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
@@ -14,8 +16,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
 
 //        String myExternalFilePath = "file:///D:/java/projects/skillbox/DIPLOM/blog/Spring_Blog/src/main/resources/upload/";
-        String myExternalFilePath = "file:resources/upload/";
-        registry.addResourceHandler("/upload/**").addResourceLocations(myExternalFilePath);
+//        String myExternalFilePath = "file:/resources/upload";
+
+        String currentPath = new File(".").getAbsolutePath();
+        String  location = "file:///" + currentPath + "src/main/resources/upload/";
+        location = location.replace(".","");
+
+        registry.addResourceHandler("/upload/**")
+                .addResourceLocations(location);
 
     }
 }
