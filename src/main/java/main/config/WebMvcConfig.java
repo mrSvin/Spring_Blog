@@ -15,11 +15,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
 
-//        String myExternalFilePath = "file:///D:/java/projects/skillbox/DIPLOM/blog/Spring_Blog/src/main/resources/upload/";
-//        String myExternalFilePath = "file:/resources/upload";
-
-        String currentPath = new File(".").getAbsolutePath();
-        String  location = "file:///" + currentPath + "src/main/resources/upload/";
+        String  location = "file:src/main/resources/upload/";
         location = location.replace(".","");
 
         registry.addResourceHandler("/upload/**")
