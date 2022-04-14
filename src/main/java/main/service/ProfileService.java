@@ -52,7 +52,7 @@ public class ProfileService {
             String nameImage = randomNameGeneration();
             writeImageInServer(photo, nameImage);
 
-            usersRepository.changeProfile(email, name, password, "http://localhost:8081/upload/" + nameImage + ".png", idUser);
+            usersRepository.changeProfile(email, name, password, "https://blog-opensource.herokuapp.com/upload/" + nameImage + ".png", idUser);
 
         }
 
