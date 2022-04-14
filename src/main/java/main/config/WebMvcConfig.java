@@ -16,8 +16,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
 
         String  location = "file:src/main/resources/upload/";
-        location = location.replace(".","");
-
         registry.addResourceHandler("/upload/**")
                 .addResourceLocations(location);
 
