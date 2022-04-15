@@ -9,6 +9,7 @@ import org.springframework.aop.AopInvocationException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 @Service
 public class TagService {
@@ -44,7 +45,7 @@ public class TagService {
     private List<Map<String, Object>> calculateWeightTag(String query) {
 
         List<Map<String, Object>> resultweight = new ArrayList<>();
-        double maxWeightTag = 0;
+
         int queryTagId = -1;  // номер строки запрашиваемого тега в таблице
 
         List<String> tags = new ArrayList<>();
@@ -62,23 +63,14 @@ public class TagService {
          List<Integer> countPostTags = tag2postRepository.findCountTag();
         System.out.println("Количество публикаций у тэгов: " + countPostTags);
 
-        //Находим вес у каждого тэга
-        float count = countPostTags.size();
-        List<Double> weightTag = tag2postRepository.findWeightTag(count);
-        System.out.println("Вес публикаций у тэгов: " + weightTag);
-
-        //Находим максимальный Вес
-        maxWeightTag = tag2postRepository.findMaxWeightTag(count);
-        System.out.println("Максимальный вес: " + maxWeightTag);
-
-        // Находим коэффициенты нормализации для каждого тэга
-        List<Double> koefTags = tag2postRepository.findKoefTag(maxWeightTag);
-        System.out.println("Коэффициенты нормализации у тэгов: " + koefTags);
-
         // Ненормализованный вес каждого тега
+        int maxWeightTag = Collections.max(countPostTags);
+        double oneProcent = maxWeightTag/100.0;
+
         List<Double> notNormWeightTags = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            notNormWeightTags.add(weightTag.get(i) * koefTags.get(i));
+        for (int i = 0; i < countPostTags.size(); i++) {
+            Double notNormWeight = (Double.valueOf(countPostTags.get(i))/oneProcent)/100.0;
+            notNormWeightTags.add(notNormWeight);
         }
         System.out.println("Ненормализованный вес каждого тега: " + notNormWeightTags);
 
