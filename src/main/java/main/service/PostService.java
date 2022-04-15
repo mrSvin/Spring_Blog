@@ -82,6 +82,13 @@ public class PostService {
         postDetailsDto.setTitle(post.getTitle());
 
         String annotation = post.getText();
+        while (annotation.indexOf(">") > 0) {
+            int beginTag = annotation.indexOf("<");
+            int endTag = annotation.indexOf(">")+1;
+            annotation = annotation.replace(annotation.substring(beginTag, endTag), "");
+            System.out.println(annotation);
+        }
+
         if (annotation.length() > 150) {
             annotation = annotation.substring(0, 150) + "...";
         }
