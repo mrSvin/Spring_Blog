@@ -17,23 +17,27 @@ import java.util.Map;
 public interface PostRepository extends CrudRepository<Post, Integer> {
 
     @Query(value="SELECT * FROM posts " +
+            "where moderation_status='ACCEPTED'" +
             "order by time " +
             "limit ?1 offset ?2", nativeQuery = true)
     public List<Post> findByEarly(int limit, int offset);
 
     @Query(value="SELECT * FROM posts " +
+            "where moderation_status='ACCEPTED'" +
             "order by time desc " +
             "limit ?1 offset ?2", nativeQuery = true)
     public List<Post> findByRecent(int limit, int offset);
 
     @Query(value="SELECT * FROM posts " +
             "INNER join post_votes ON post_votes.post_id = posts.id " +
+            "where moderation_status='ACCEPTED'" +
             "order by value desc " +
             "limit ?1 offset ?2", nativeQuery = true)
     public List<Post> findByBest(int limit, int offset);
 
     @Query(value="SELECT *, COUNT(post_id) as 'count_comments' FROM post_comments" +
             " join posts on posts.id = post_comments.post_id " +
+            "where moderation_status='ACCEPTED'" +
             "group by post_id " +
             "order by count_comments desc " +
             "limit ?1 offset ?2", nativeQuery = true)
