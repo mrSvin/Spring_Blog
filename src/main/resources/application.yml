@@ -2,9 +2,9 @@ server:
   port : 8081
 spring:
   datasource:
-    url: jdbc:mysql://vipal994.beget.tech/vipal994_blog?useSSL=false&serverTimezone=Europe/Moscow
-    username: vipal994_blog
-    password: sava1812!
+    url: jdbc:mysql://localhost:3306/skillbox_blog?useSSL=false&serverTimezone=Europe/Moscow
+    username: root
+    password: root
   jpa:
     hibernate:
       ddl-auto: update
