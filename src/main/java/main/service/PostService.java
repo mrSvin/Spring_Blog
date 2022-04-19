@@ -369,7 +369,7 @@ public class PostService {
     }
 
     private Date searchTimeForPost(Timestamp timestamp) {
-        long serverTime = System.currentTimeMillis()-12*60*60;
+        long serverTime = System.currentTimeMillis();
         if (timestamp.getTime() * 1000 < serverTime) {
             return new Date(serverTime);
         } else {
