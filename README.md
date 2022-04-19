@@ -2,7 +2,7 @@
 
 ![alt text](https://raw.githubusercontent.com/mrSvin/Spring_Blog/master/infoImage.PNG)
 
-##Описание
+## Описание
 Blog - web приложение для ведения блогов, в основе которого backen на Java Spring и фронтенд на Vue.js(написан на стороне). Клиент серверный обмен организован на REST API. Проект развернут в облаке Heroku, БД развернута в облаке Beget. 
 
 ## Ссылка на развернутое приложение: https://blog-opensource.herokuapp.com/
