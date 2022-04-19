@@ -21,6 +21,6 @@ Blog - web приложениедля ведения блогов, в основ
 - Java 11
 - Maven
 - SprinBoot 2
-- Spring Data JPA
+- Spring Data JPA (CrudRepository)
 - MySql
 - javax.mail
