@@ -8,7 +8,7 @@ public class InitResponseDto {
     private String phone = "333";
     private String email = "mail@mail.ru";
     private String copyright = "opensource";
-    private String copyrightFrom = "2022";
+    private String copyrightFrom = "2021";
 
     public String getTitle() {
         return title;
@@ -60,11 +60,3 @@ public class InitResponseDto {
 
 }
 
-//{
-//        "title":"DevPub",
-//        "subtitle":"Рассказы разработчиков",
-//        "phone":"+7 903 666-44-55",
-//        "email":"mail@mail.ru",
-//        "copyright":"Дмитрий Сергеев",
-//        "copyrightFrom":"2005"
-//        }

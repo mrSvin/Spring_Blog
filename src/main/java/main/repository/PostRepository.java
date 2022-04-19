@@ -103,7 +103,7 @@ public interface PostRepository extends CrudRepository<Post, Integer> {
             "where id=?1", nativeQuery = true)
     public List<Post> findPostId(int idPost);
 
-    @Query(value="SELECT  year(time) FROM posts group by year(time)", nativeQuery = true)
+    @Query(value="SELECT year(time) FROM posts group by year(time)", nativeQuery = true)
     public List<Integer> findYearsForCalendar();
 
     @Query(value="SELECT COUNT(*) FROM posts where user_id = ?1", nativeQuery = true)

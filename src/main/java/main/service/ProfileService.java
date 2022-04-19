@@ -49,10 +49,11 @@ public class ProfileService {
         } else {
             changeProfileResponse.setResult(true);
 
-            String nameImage = randomNameGeneration();
+//            String nameImage = randomNameGeneration();
+            String nameImage = usersRepository.findUserInfo(idUser).getName();
             writeImageInServer(photo, nameImage);
 
-            usersRepository.changeProfile(email, name, password, "https://blog-opensource.herokuapp.com/upload/" + nameImage + ".png", idUser);
+            usersRepository.changeProfile(email, name, password, "https://blog-opensource.herokuapp.com/upload/usersProfile" + nameImage + ".png", idUser);
 
         }
 
@@ -109,7 +110,7 @@ public class ProfileService {
         BufferedImage outputImage = new BufferedImage(36, 36, BufferedImage.TYPE_INT_RGB);
         outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
 
-        ImageIO.write(outputImage, "png", new File("src/main/resources/upload/" + nameImage + ".png"));
+        ImageIO.write(outputImage, "png", new File("src/main/resources/upload/usersProfile" + nameImage + ".png"));
 
     }
 
