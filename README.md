@@ -3,7 +3,7 @@
 Blog - web приложение для ведения блогов, в основе которого backen на Java Spring и фронтенд на Vue.js(написан на стороне). Клиент серверный обмен организован на REST API. Проект развернут в облаке Heroku, БД развернута в облаке Beget. 
 
 ## Ссылка на развернутое приложение: https://blog-open.herokuapp.com/posts/recent
-![alt text](https://c.pxhere.com/images/f6/19/df68e8a508b0207a93278b831ca5-1444407.jpg!d)
+![alt text](https://raw.githubusercontent.com/mrSvin/Spring_Blog/master/infoImage.PNG)
 
 ## Реализованные функции
 - регистрация пользователей
