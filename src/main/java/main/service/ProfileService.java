@@ -17,6 +17,7 @@ import java.util.UUID;
 public class ProfileService {
 
     private final UsersRepository usersRepository;
+    private String adrPhoto = "/upload/usersProfile/";
 
     public ProfileService(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
@@ -53,7 +54,7 @@ public class ProfileService {
             String nameImage = "id-" + usersRepository.findUserInfo(idUser).getId();
             writeImageInServer(photo, nameImage);
 
-            usersRepository.changeProfile(email, name, password, "https://blog-opensource.herokuapp.com/upload/usersProfile/" + nameImage + ".png", idUser);
+            usersRepository.changeProfile(email, name, password, adrPhoto + nameImage + ".png", idUser);
 
         }
 
@@ -106,8 +107,8 @@ public class ProfileService {
 
         ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
         BufferedImage imageBuffer = ImageIO.read(bais);
-        Image resultingImage = imageBuffer.getScaledInstance(36, 36, Image.SCALE_DEFAULT);
-        BufferedImage outputImage = new BufferedImage(36, 36, BufferedImage.TYPE_INT_RGB);
+        Image resultingImage = imageBuffer.getScaledInstance(72, 72, Image.SCALE_DEFAULT);
+        BufferedImage outputImage = new BufferedImage(72, 72, BufferedImage.TYPE_INT_RGB);
         outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
 
         ImageIO.write(outputImage, "png", new File("src/main/resources/upload/usersProfile/" + nameImage + ".png"));
