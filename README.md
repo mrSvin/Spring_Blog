@@ -1,4 +1,4 @@
-<h1 align="center">Blog</h1>
+<h1 align="center">Blog DevPub</h1>
 
 ![alt text](https://raw.githubusercontent.com/mrSvin/Spring_Blog/master/infoImage.PNG)
 
