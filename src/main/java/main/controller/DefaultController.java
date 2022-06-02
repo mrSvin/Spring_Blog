@@ -10,7 +10,26 @@ public class DefaultController {
 
     @RequestMapping(value="/")
     public String index() {
-//        System.out.println(initResponse.getTitle());
+        return "index";
+    }
+
+    @RequestMapping(value="/posts/recent")
+    public String recent() {
+        return "index";
+    }
+
+    @RequestMapping(value="/posts/popular")
+    public String popular() {
+        return "index";
+    }
+
+    @RequestMapping(value="/posts/best")
+    public String best() {
+        return "index";
+    }
+
+    @RequestMapping(value="/posts/early")
+    public String early() {
         return "index";
     }
     
