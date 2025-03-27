@@ -28,7 +28,7 @@ public class RestorePasswordService {
         if (usersRepository.findByEmail(toEmail).size()>0) {
             logoutResponse.setResult(true);
             String hash = generateHash();
-            String responseMessage = "https://blog-opensource.herokuapp.com/login/change-password/" + hash;
+            String responseMessage = "localhost:8081/login/change-password/" + hash;
             sslSender.send("Восстановление пароля Blog", responseMessage, toEmail);
             usersRepository.changeCode(hash, toEmail);
         } else {

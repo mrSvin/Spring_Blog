@@ -64,6 +64,9 @@ public class TagService {
         System.out.println("Количество публикаций у тэгов: " + countPostTags);
 
         // Ненормализованный вес каждого тега
+        if (countPostTags.size() == 0) {
+            return resultweight;
+        }
         int maxWeightTag = Collections.max(countPostTags);
         double oneProcent = maxWeightTag/100.0;
 
