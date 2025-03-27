@@ -32,5 +32,15 @@ public class DefaultController {
     public String early() {
         return "index";
     }
+
+    @RequestMapping(value="/settings")
+    public String settings() {
+        return "index";
+    }
+
+    @RequestMapping(value="/login")
+    public String login() {
+        return "index";
+    }
     
 }

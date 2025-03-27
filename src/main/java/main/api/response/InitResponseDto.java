@@ -5,8 +5,8 @@ public class InitResponseDto {
 
     private String title = "DevPub";
     private String subtitle = "Blog";
-    private String phone = "333";
-    private String email = "mail@mail.ru";
+    private String phone = "89083064918";
+    private String email = "vipal921@gmail.com";
     private String copyright = "opensource";
     private String copyrightFrom = "2021";
 
