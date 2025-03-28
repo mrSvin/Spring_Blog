@@ -3,12 +3,12 @@ package main.api.response;
 
 public class InitResponseDto {
 
-    private String title = "DevPub";
-    private String subtitle = "Blog";
-    private String phone = "89083064918";
-    private String email = "vipal921@gmail.com";
-    private String copyright = "opensource";
-    private String copyrightFrom = "2021";
+    private String title = "Сеспель";
+    private String subtitle = "Форум";
+    private String phone = "+7 800 505-06-34";
+    private String email = "zaosespel@yandex.ru";
+    private String copyright = "";
+    private String copyrightFrom = "2024";
 
     public String getTitle() {
         return title;
