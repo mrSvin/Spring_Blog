@@ -62,7 +62,7 @@ public class ApiAuthController {
     private LogoutResponse Logout(HttpServletResponse response, @CookieValue(value = "auth", defaultValue = "") String authCoocie) {
         Cookie cookie = new Cookie("auth",  "");
         cookie.setPath("/");
-        System.out.println(authCoocie);
+        System.out.println("произошел логаут " + authCoocie);
         response.addCookie(cookie);
         return loginService.logout(authCoocie);
     }

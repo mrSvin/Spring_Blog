@@ -49,8 +49,8 @@ public class ApiGeneralController {
     }
 
     @GetMapping("/auth/check")
-    private AuthCheckResponse Check() {
-        return authCheckService.getAuthCheck();
+    private AuthCheckResponse Check(@CookieValue(value = "auth") String authСookie) {
+        return authCheckService.getAuthCheck(authСookie);
     }
 
     @GetMapping("/tag")

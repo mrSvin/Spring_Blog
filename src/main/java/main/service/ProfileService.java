@@ -48,13 +48,13 @@ public class ProfileService {
             error.put("password", "Пароль короче 6-ти символов");
             changeProfileResponse.setErrors(error);
         } else {
-            changeProfileResponse.setResult(true);
 
 //            String nameImage = randomNameGeneration();
-            String nameImage = "id-" + usersRepository.findUserInfo(idUser).getId();
+            String nameImage = "id-" + usersRepository.findUserInfo(idUser).getId() + "-" + randomNameGeneration();
             writeImageInServer(photo, nameImage);
 
             usersRepository.changeProfile(email, name, password, adrPhoto + nameImage + ".png", idUser);
+            changeProfileResponse.setResult(true);
 
         }
 
@@ -62,7 +62,7 @@ public class ProfileService {
     }
 
     public ChangeProfileResponse changeProfileNoPhoto(String authCoocie, String email,
-                                               String name, String password, Integer removePhoto) throws IOException {
+                                                      String name, String password, Integer removePhoto) throws IOException {
         ChangeProfileResponse changeProfileResponse = new ChangeProfileResponse();
 
         int idUser = LoginService.sessions.get(authCoocie);

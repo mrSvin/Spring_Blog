@@ -86,7 +86,6 @@ public class PostService {
             int beginTag = annotation.indexOf("<");
             int endTag = annotation.indexOf(">")+1;
             annotation = annotation.replace(annotation.substring(beginTag, endTag), "");
-            System.out.println(annotation);
         }
 
         if (annotation.length() > 150) {
@@ -239,8 +238,6 @@ public class PostService {
         //Добавляем просмотр если юзер не модератор и это не автор
         try {
             int idUser = LoginService.sessions.get(authCoocie);
-            System.out.println(usersRepository.findUserInfo(idUser).getIs_moderator());
-            System.out.println(postRepository.countMyPostsId(idUser, id));
 
             if (usersRepository.findUserInfo(idUser).getIs_moderator() == 0 && postRepository.countMyPostsId(idUser, id) == 0) {
                 postRepository.addView(id);
