@@ -49,8 +49,8 @@ public class ProfileService {
             changeProfileResponse.setErrors(error);
         } else {
 
-//            String nameImage = randomNameGeneration();
             String nameImage = "id-" + usersRepository.findUserInfo(idUser).getId() + "-" + randomNameGeneration();
+//            String nameImage = "id-" + usersRepository.findUserInfo(idUser).getId();
             writeImageInServer(photo, nameImage);
 
             usersRepository.changeProfile(email, name, password, adrPhoto + nameImage + ".png", idUser);

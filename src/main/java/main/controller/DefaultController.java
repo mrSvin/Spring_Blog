@@ -1,6 +1,5 @@
 package main.controller;
 
-import main.api.response.InitResponseDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -8,39 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class DefaultController {
 
-    @RequestMapping(value="/")
+    @RequestMapping(value = {"/", "/{path:^(?!upload$).*$}/**"})  // Все URL, кроме явно указанных
     public String index() {
         return "index";
     }
 
-    @RequestMapping(value="/posts/recent")
-    public String recent() {
-        return "index";
-    }
-
-    @RequestMapping(value="/posts/popular")
-    public String popular() {
-        return "index";
-    }
-
-    @RequestMapping(value="/posts/best")
-    public String best() {
-        return "index";
-    }
-
-    @RequestMapping(value="/posts/early")
-    public String early() {
-        return "index";
-    }
-
-    @RequestMapping(value="/settings")
-    public String settings() {
-        return "index";
-    }
-
-    @RequestMapping(value="/login")
-    public String login() {
-        return "index";
-    }
-    
 }
